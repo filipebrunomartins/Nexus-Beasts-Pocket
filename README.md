@@ -5,7 +5,7 @@
 Este documento tem dois objetivos:
 
 1. **Documentar todas as regras e mecânicas do Pokémon TCG Pocket** (o jogo de referência), para que você entenda exatamente como ele funciona.
-2. **Fornecer um passo a passo completo de criação de um novo jogo** com as mesmas regras, mas com um universo, tipos e monstros 100% originais — incluindo um jogo de exemplo pronto ("Nexus Beasts Pocket") com 50+ monstros originais (mínimo 5 de cada um dos 10 tipos) e um conjunto completo de cartas de suporte.
+2. **Fornecer um passo a passo completo de criação de um novo JOGO DE CELULAR** com as mesmas regras, mas com um universo, tipos e monstros 100% originais — incluindo um jogo de exemplo pronto ("Nexus Beasts Pocket") com 50+ monstros originais (mínimo 5 de cada um dos 10 tipos), um conjunto completo de cartas de suporte e o plano completo de desenvolvimento do aplicativo mobile (telas, sistemas, tecnologias e roadmap na Parte 7).
 
 > **Nota legal importante:** mecânicas e regras de jogo não são protegidas por direitos autorais, mas nomes, personagens, artes, textos de cartas e a marca "Pokémon" são propriedade da The Pokémon Company/Nintendo. Para criar um jogo próprio com segurança, você deve criar **nomes, criaturas, artes e textos totalmente originais** — que é exatamente o que este guia faz.
 
@@ -176,9 +176,13 @@ Checklist de saúde do jogo:
 - Alguma carta nunca é usada? → fortaleça (buff) ou redesenhe.
 - Um jogador que está perdendo consegue virar o jogo? Deve ser possível, mas não trivial.
 
-## Etapa 10 — Produza o protótipo
-- **Físico:** imprima as cartas em papel (9 por folha A4), use protetores de carta (sleeves) com uma carta comum atrás para dar rigidez; use dado/moeda e marcadores de dano de 10/50.
-- **Digital:** comece com Tabletop Simulator/Playingcards.io para testes; para um app real, uma stack simples é Godot ou Unity + servidor autoritativo (Node/Go) com matchmaking. Toda a lógica de regras deve rodar no servidor para evitar trapaças.
+## Etapa 10 — Desenvolva o aplicativo mobile
+Este é o objetivo final do projeto. O caminho completo está detalhado na **Parte 7**, mas o resumo da V1 é:
+1. **Protótipo jogável rápido** (1 tela de batalha vs. IA simples) para validar as regras antes de investir em arte;
+2. **Núcleo do jogo:** coleção, abertura de pacotes, editor de baralho e batalha;
+3. **Modo Campanha:** 4 mapas em dificuldade crescente com 6 desafiantes cada (a temática da V1 — seção 7.5);
+4. **Lançamento** nas lojas (Google Play / App Store).
+*(PvP online fica anotado como V2 — ver seção 7.6.)*
 
 ---
 
@@ -398,6 +402,194 @@ Fraqueza: [tipo +20]        Recuo: [0-4 ⭐]
 2. **Set 3:** monstros Ω evoluídos (Estágio 2 Ω) com 170–190 PS.
 3. **Set 4:** mecânica nova exclusiva sua (ex.: "Fúria" — bônus quando o monstro está com metade dos PS), para o jogo ganhar identidade própria além do clone.
 
----
+# PARTE 7 — DESENVOLVIMENTO DO APLICATIVO MOBILE
 
-*Documento criado como guia de design. Todos os nomes de monstros, cartas e o universo "Nexus Beasts" são originais e livres para você usar e modificar no seu projeto.*
+Esta parte transforma o design de jogo (Partes 1–6) em um plano concreto de aplicativo para celular, replicando a estrutura de produto do jogo de referência.
+
+## 7.1 Sistemas do app a replicar (além das batalhas)
+
+O jogo de referência não é só batalha — o coração dele é o **colecionismo**. Seu app precisa destes sistemas:
+
+| Sistema | Como funciona no jogo de referência | Como replicar no seu jogo |
+|---|---|---|
+| **Abertura de pacotes** | 2 pacotes grátis por dia (1 a cada 12h), com 5 cartas cada e animação de "rasgar" o pacote | Timer de 12h por pacote; animação de deslizar o dedo para abrir; 5 cartas por pacote com reveal uma a uma |
+| **Raridades** | Cartas comuns a ultrarraras, com versões alternativas ilustradas | ♦1 (comum), ♦2, ♦3, ♦4 (Ω), ★ (arte especial). Tabela de chances por slot do pacote |
+| **Aceleradores** | Item que reduz o tempo de espera do próximo pacote | "Ampulhetas de Mana": cada uma reduz 1h do timer; ganhas em missões e níveis |
+| **Coleção/Álbum** | Fichários personalizáveis e vitrine para exibir cartas aos amigos | Álbum digital com filtros por tipo/raridade + vitrine pública no perfil |
+| **Editor de baralho** | Montagem de decks de 20 cartas com validação automática (máx. 2 por nome) e decks pré-montados de aluguel | Editor com validação em tempo real + 2 decks iniciais emprestados para novatos (os da Parte 5) |
+| **Missões diárias** | Tarefas simples que dão XP e itens | "Vença 1 batalha", "Abra 1 pacote", "Cause 200 de dano" → recompensas de moedas/ampulhetas |
+| **Progressão de conta** | Nível de jogador que desbloqueia modos e dá recompensas | XP por partida e missão; PvP desbloqueia no nível 3 (como no original) |
+| **Moedas** | Moedas de loja, tickets e moeda premium comprada com dinheiro real | 1 moeda grátis (missões) + 1 premium (compras opcionais) — nunca venda poder direto, venda velocidade de coleção e cosméticos |
+| **Modos de jogo** | Solo vs. IA (com auto-battle), PvP casual, eventos temporários | **V1: apenas Modo Campanha vs. IA** — 4 mapas (Fácil → Super Difícil) com 6 desafiantes cada (seção 7.5). PvP online fica **anotado para a V2** |
+
+## 7.2 Mapa de telas do aplicativo
+
+```
+[Splash/Login]
+   └── [HOME] ─┬── [Loja de Pacotes] → [Animação de abertura] → [Reveal das cartas]
+               ├── [Coleção/Álbum] → [Detalhe da carta (zoom + arte)]
+               ├── [Baralhos] → [Editor de baralho]
+               ├── [CAMPANHA] → [Seleção de Mapa (4 mapas)] → [Trilha de 6 desafiantes]
+               │                     └── [Tela pré-batalha do desafiante] → [Batalha vs. IA]
+               ├── [Missões / Recompensas diárias]
+               └── [Perfil / Vitrine / Configurações]
+
+(V2 — anotado para o futuro: botão [PvP online] na Home, com matchmaking e amigos)
+```
+
+A **tela de batalha** deve mostrar: Linha de Frente e Reserva dos dois lados, mão do jogador (arrastar para jogar), Núcleo de Mana com a **próxima mana visível**, placar de Selos (0–3), pilha de descarte, botão de ataque/recuo e timer de turno.
+
+## 7.3 Arquitetura técnica recomendada
+
+**Na V1 (offline, só vs. IA) tudo roda no próprio celular** — sem servidor de partidas, sem matchmaking, sem contas online obrigatórias. Isso corta meses de trabalho e custo de infraestrutura.
+
+```
+V1 (este documento):
+[App mobile]  →  Motor de regras local + IA + save local (SQLite/arquivo)
+                 Godot / Unity / Flutter (Flame)
+
+V2 (anotado para o futuro — PvP online):
+[App mobile]  ⇄  [API + Servidor de partidas autoritativo]  ⇄  [PostgreSQL + Redis]
+```
+
+**Decisão de projeto importante (para não sofrer na V2):** escreva o **motor de regras como uma biblioteca pura e isolada** — ele recebe um estado + uma ação e devolve o novo estado, sem saber nada de telas ou rede. Na V1 essa biblioteca roda no celular; na V2 a MESMA biblioteca é movida para o servidor autoritativo sem reescrever nada.
+
+**Escolha do motor (engine):**
+- **Godot 4** — gratuito e open source, ótimo para 2D, exporta Android/iOS. Melhor custo-benefício para indie.
+- **Unity** — mais material de estudo e assets prontos; bom se você já conhece C#.
+- **Flutter + Flame** — se você vem do mundo de apps; excelente para as telas de menu/coleção, razoável para a batalha.
+
+**Componentes essenciais da V1:**
+1. **Motor de regras** — máquina de estados que implementa a Parte 1 (turnos, custos, fraqueza +20, condições especiais, checkup entre turnos), com testes automatizados.
+2. **IA dos desafiantes** — heurística com "temperos" por dificuldade (detalhes na seção 7.5.5).
+3. **Save local** — coleção, progresso da campanha, timers de pacote e missões salvos no aparelho (com backup em nuvem opcional via Google Play Games / Game Center).
+4. **Serviço de coleção/economia local** — inventário, timers de pacote, missões e recompensas da campanha.
+
+## 7.4 Dados: as cartas como conteúdo, não como código
+
+Modele cada carta como **dados** (JSON) interpretados pelo motor de regras — assim você adiciona expansões sem atualizar o app:
+
+```json
+{
+  "id": "NB-014",
+  "nome": "Pirandra",
+  "categoria": "besta",
+  "estagio": 1,
+  "evolui_de": "NB-013",
+  "tipo": "brasa",
+  "ps": 90,
+  "fraqueza": "mare",
+  "recuo": 2,
+  "raridade": 2,
+  "ataques": [{
+    "nome": "Bafo Ardente",
+    "custo": ["brasa", "brasa", "qualquer"],
+    "dano": 60,
+    "efeitos": [{ "tipo": "moeda", "se_cara": { "status": "queimado" } }]
+  }]
+}
+```
+
+Efeitos viram um vocabulário fixo de "blocos" (dano, moeda, status, cura, mover_mana, comprar_carta, trocar_ativo...). Com ~20 blocos você cobre todas as 79 cartas do set inicial.
+
+## 7.5 MODO CAMPANHA — a temática da V1: 4 mapas, 24 desafiantes
+
+A primeira versão do jogo é uma jornada solo: o jogador percorre 4 mapas em dificuldade crescente, cada um com **6 desafiantes** controlados pela IA. Vencer um desafiante desbloqueia o próximo; vencer o 6º (o "Guardião" do mapa) desbloqueia o mapa seguinte.
+
+### 7.5.1 🌿 Mapa 1 — VALE DO DESPERTAR (Easy)
+Planícies verdes onde os Invocadores dão os primeiros passos. Decks simples, sem cartas Ω, IA no nível mais brando.
+
+| # | Desafiante | Perfil | Deck (tema) | Recompensa |
+|---|---|---|---|---|
+| 1 | **Nino, o Novato** | Garoto animado com sua primeira Besta | Neutro ⭐ (Fofurelho, Melodina) | 50 moedas + tutorial |
+| 2 | **Vovó Petúnia** | Jardineira gentil | Flora 🌿 (Brotinelo, Cogumim) | 1 pacote |
+| 3 | **Pescador Tonho** | Calmo, só pensa no rio | Maré 💧 (Gotari, Peixelor) | 80 moedas |
+| 4 | **Faísca Lia** | Criança elétrica demais | Faísca ⚡ (Voltim, Zumbizz) | 1 Ampulheta de Mana ×3 |
+| 5 | **Bento Brasado** | Cozinheiro que ama pimenta | Brasa 🔥 (Fagulho, Cinzelim) | 100 moedas |
+| 6 | **🏅 GUARDIÃ AURORA** | Protetora do Vale, primeira prova real | Flora/Neutro com Selvarok (Est. 2) | Carta promocional **Selvarok** + desbloqueia Mapa 2 |
+
+### 7.5.2 💧 Mapa 2 — COSTA DAS MARÉS BRAVIAS (Medium)
+Falésias, tempestades e um farol antigo. Decks com linhas evolutivas completas e primeiras cartas Ω; IA passa a recuar e usar Mentores na hora certa.
+
+| # | Desafiante | Perfil | Deck (tema) | Recompensa |
+|---|---|---|---|---|
+| 1 | **Marujo Calango** | Fanfarrão do porto | Maré 💧 (Concharrico tanque) | 100 moedas |
+| 2 | **Íris do Farol** | Misteriosa vigia noturna | Mente 🔮 (Hipnolho + sono) | 1 pacote |
+| 3 | **Gêmeos Turbo & Trovão** | Dupla que batalha em revezamento (2 batalhas seguidas, o dano persiste) | Faísca ⚡ / Neutro ⭐ | 150 moedas |
+| 4 | **Ferrália, a Sucateira** | Coleciona sucata da praia | Aço ⚙️ (Latinha, Gyrodrone) | Ampulheta ×5 |
+| 5 | **Capitã Salmora** | Veterana dos sete mares | Maré 💧 com Abissarion | 1 pacote |
+| 6 | **🏅 GUARDIÃO MAREVIVO** | Lenda que fala com o oceano | Maré 💧 com **Abissarion Ω** | Carta promocional **Abissarion Ω** + desbloqueia Mapa 3 |
+
+### 7.5.3 🌋 Mapa 3 — PICOS DA TEMPESTADE (Hard)
+Montanhas vulcânicas cortadas por raios eternos. Decks otimizados de 2 tipos, uso pesado de status e controle; IA joga para nocautes de 2 selos e protege suas Ω.
+
+| # | Desafiante | Perfil | Deck (tema) | Recompensa |
+|---|---|---|---|---|
+| 1 | **Brasa Kael** | Escalador destemido | Brasa 🔥 (queimadura + Lavaboi) | 150 moedas |
+| 2 | **Monge Basalto** | Imóvel como a montanha | Rocha 🪨 (Titanólito muralha) | 1 pacote |
+| 3 | **Corvina Sombria** | Ladra dos desfiladeiros | Sombra 🌑 (veneno + Corvomau) | 200 moedas |
+| 4 | **Engenheira Volta** | Constrói pararraios vivos | Faísca ⚡/Aço ⚙️ (Tempestrix) | Ampulheta ×5 |
+| 5 | **Eremita Zev** | Vê o futuro nas nuvens | Mente 🔮 com Astrallume Ω | 1 pacote |
+| 6 | **🏅 GUARDIÃO FULGOR** | Senhor dos raios do pico | Faísca ⚡ com **Tempestrix Ω** + Vulkragon | Carta promocional **Tempestrix Ω** + desbloqueia Mapa 4 |
+
+### 7.5.4 🌑 Mapa 4 — ABISMO DO NEXUS (Super Hard)
+A fenda de onde as Bestas vieram ao mundo. Decks "chefe" com regras especiais e a IA no nível máximo (pondera 2 turnos à frente).
+
+| # | Desafiante | Perfil | Deck (tema) | Recompensa |
+|---|---|---|---|---|
+| 1 | **Vigia Umbra** | Sentinela da entrada | Sombra 🌑 com Reinoturno Ω | 200 moedas |
+| 2 | **Forjadora Nyx** | Molda Bestas de metal vivo | Aço ⚙️ com Fortalezaur Ω (começa com 1 Ferramenta anexada — regra especial de chefe) | 1 pacote |
+| 3 | **Dracontor, o Domador** | Cavaleiro de feras míticas | Mito 🐉 (Dracolim, Wyrmito, Serpelume) | 250 moedas |
+| 4 | **As Três Máscaras** | Entidade que troca de deck a cada batalha (Flora → Brasa → Maré, o jogador enfrenta 1 sorteado) | Variável | Ampulheta ×8 |
+| 5 | **Eco do Vazio** | Espelho sombrio: joga com uma CÓPIA do deck do jogador | Espelho | 1 pacote |
+| 6 | **👑 GUARDIÃO PRIMORDIAL ÆON** | O primeiro Invocador, chefe final da V1 | Mito 🐉 com **Aetherion Ω** + Aetherion (regra especial: começa com 1 mana extra) | Carta promocional **Aetherion Ω** (arte ★) + título "Herói do Nexus" no perfil |
+
+### 7.5.5 Como a IA escala por mapa
+
+| Mapa | Comportamento da IA |
+|---|---|
+| Vale do Despertar | Heurística básica: evolui se puder, anexa mana no Ativo, sempre ataca com o maior dano. Comete "erros" de propósito (20% de chance de anexar mana no monstro errado). |
+| Costa das Marés Bravias | Sem erros propositais; passa a usar Mentores/Itens corretamente e a recuar monstros quase nocauteados. |
+| Picos da Tempestade | Prioriza alvos: caça suas cartas Ω (2 selos), joga status na hora certa e carrega um segundo atacante na Reserva. |
+| Abismo do Nexus | Simulação simples de 2 turnos à frente (minimax raso): escolhe a ação que maximiza selos esperados; usa as regras especiais de chefe. |
+
+### 7.5.6 Regras de progressão da campanha
+- Cada desafiante vencido pela **primeira vez** dá a recompensa da tabela; revanches dão XP e moedas reduzidas (para farm saudável).
+- **Estrelas de desempenho** (1–3★ por batalha): vencer / vencer sem perder uma Besta / vencer em até 12 turnos. Juntar estrelas libera pacotes bônus por mapa.
+- As **cartas promocionais dos Guardiões** são a espinha da coleção da V1 — motivo para terminar cada mapa.
+- Missões diárias da V1 apontam para a campanha ("Vença 2 desafiantes", "Ganhe com um deck de Brasa" etc.).
+
+## 7.6 Roadmap de desenvolvimento da V1 (offline)
+
+**Fase 0 — Protótipo (2–4 semanas)**
+- Motor de regras como biblioteca isolada + testes automatizados de cada regra da Parte 1
+- Tela de batalha feia porém funcional contra a IA básica, com as 79 cartas em JSON
+- Meta: validar que o jogo é divertido antes de gastar com arte
+
+**Fase 1 — Núcleo do jogo (1–2 meses)**
+- Telas: home, coleção, editor de baralho, batalha
+- Sistema de pacotes com timer local + missões diárias + progressão de nível
+- Save local com backup opcional em nuvem
+
+**Fase 2 — Modo Campanha (1–2 meses)**
+- Os 4 mapas com trilha visual de 6 desafiantes, telas pré-batalha com fala/retrato de cada desafiante
+- Os 4 níveis de IA da seção 7.5.5 + regras especiais dos chefes
+- Recompensas, estrelas de desempenho e cartas promocionais dos Guardiões
+
+**Fase 3 — Polimento e lançamento (1–2 meses)**
+- Arte final das 79 cartas + retratos dos 24 desafiantes + cenários dos 4 mapas
+- Animações de pacote e ataque, tutorial interativo (a batalha contra Nino é o tutorial)
+- Loja com compras opcionais, LGPD/privacidade, classificação indicativa, publicação nas lojas
+
+**📌 V2 — ANOTADO PARA O FUTURO (não desenvolver agora):**
+- PvP online com servidor autoritativo (o motor de regras da Fase 0 migra para o servidor sem reescrita)
+- Matchmaking, ranking, lista de amigos e vitrine pública
+- Eventos temporários e trocas entre jogadores
+- Novos mapas de campanha (Set 2) reaproveitando o sistema da V1
+
+## 7.7 Cuidados legais específicos de app mobile
+- Nomes, criaturas, artes, sons e interface devem ser **originais** (todo o conteúdo deste documento já é). Inspirar-se em mecânicas é permitido; copiar identidade visual, mascotes ou nomes não é.
+- Compras no app exigem conta de desenvolvedor Google/Apple, política de privacidade e, no Brasil, atenção à LGPD e ao ECA se o público incluir crianças (evite caixas de recompensa agressivas; mostre as probabilidades de raridade dos pacotes, como os jogos do gênero fazem).
+
+---
+*Documento criado como guia de design e desenvolvimento. Todos os nomes de monstros, cartas e o universo "Nexus Beasts" são originais e livres para você usar e modificar no seu projeto.*
