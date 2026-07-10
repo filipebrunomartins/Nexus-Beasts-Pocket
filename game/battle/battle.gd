@@ -438,6 +438,7 @@ func _mostrar_fim() -> void:
 	btn.add_theme_font_size_override("font_size", 32)
 	btn.pressed.connect(func():
 		batalha_terminou.emit(venceu, state)
-		if get_parent() == get_tree().root or owner == null:
-			get_tree().reload_current_scene())
+		# Sem ninguém tratando o fim (batalha livre), volta para a Home.
+		if batalha_terminou.get_connections().is_empty():
+			get_tree().change_scene_to_file("res://game/home/home.tscn"))
 	v.add_child(btn)

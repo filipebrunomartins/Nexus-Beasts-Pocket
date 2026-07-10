@@ -6,6 +6,7 @@ extends SceneTree
 const TEST_SCRIPTS := [
 	"res://tests/test_rules.gd",
 	"res://tests/test_effects.gd",
+	"res://tests/test_packs.gd",
 ]
 
 

@@ -2,7 +2,7 @@ extends Control
 ## Cena raiz do jogo. Nas primeiras etapas serve como tela de boot;
 ## a partir da Etapa 8 passa a rotear para a Home.
 
-const CENA_INICIAL := "res://game/battle/battle.tscn"
+const CENA_INICIAL := "res://game/home/home.tscn"
 
 
 func _ready() -> void:
