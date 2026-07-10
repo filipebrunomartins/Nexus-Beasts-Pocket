@@ -1,0 +1,18 @@
+# Godot
+.godot/
+*.import
+export_presets.cfg.orig
+
+# Builds
+build/
+*.apk
+*.aab
+
+# Keystores (nunca commitar chaves de release)
+*.keystore
+*.jks
+!debug.keystore
+
+# Sistema
+.DS_Store
+*.tmp
