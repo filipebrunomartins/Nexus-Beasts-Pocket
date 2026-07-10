@@ -1,6 +1,7 @@
 extends SceneTree
 ## Simulador IA vs IA — valida regras de ponta a ponta e mede balanceamento.
-##   godot --headless -s tools/simulate.gd -- [n_partidas] [seed] [nivel_ia]
+##   godot --headless -s tools/simulate.gd -- [n_partidas] [seed] [nivel_ia] [nivel_ia_b]
+## nivel_ia_b (opcional): nível do jogador 1, para medir força entre níveis.
 ## Métricas-alvo (Parte 6.2): 10–25 turnos, quem começa vence 45–55%.
 
 const MAX_PASSOS_POR_PARTIDA := 3000
@@ -11,6 +12,7 @@ func _init() -> void:
 	var n := int(args[0]) if args.size() > 0 else 500
 	var base_seed := int(args[1]) if args.size() > 1 else 12345
 	var nivel := int(args[2]) if args.size() > 2 else 1
+	var nivel_b := int(args[3]) if args.size() > 3 else nivel
 
 	var db := CardDB.load_default()
 	var decks := CardDB.load_decks()
@@ -32,7 +34,7 @@ func _init() -> void:
 				decks[0]["tipos_mana"], decks[1]["tipos_mana"], base_seed + i, primeiro)
 		var ias: Array = [
 			HeuristicAI.new(nivel, base_seed * 7 + i * 2 + 1),
-			HeuristicAI.new(nivel, base_seed * 11 + i * 2 + 2),
+			HeuristicAI.new(nivel_b, base_seed * 11 + i * 2 + 2),
 		]
 		var passos := 0
 		while state["fase"] != "fim" and passos < MAX_PASSOS_POR_PARTIDA:
@@ -67,7 +69,7 @@ func _init() -> void:
 	var dur := (Time.get_ticks_msec() - inicio) / 1000.0
 	var completas := n - travadas
 	print("================= RELATÓRIO DE SIMULAÇÃO =================")
-	print("Partidas: %d (nível de IA %d, seed %d) em %.1fs" % [n, nivel, base_seed, dur])
+	print("Partidas: %d (IA nível %d × nível %d, seed %d) em %.1fs" % [n, nivel, nivel_b, base_seed, dur])
 	print("Travadas/abortadas: %d" % travadas)
 	if completas > 0:
 		print("%s: %d vitórias (%.1f%%)" % [nomes[0], vitorias[0], 100.0 * vitorias[0] / completas])
