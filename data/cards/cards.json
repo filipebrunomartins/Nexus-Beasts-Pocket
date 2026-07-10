@@ -1,0 +1,499 @@
+{
+  "set": "despertar-do-nexus",
+  "nome_set": "Despertar do Nexus",
+  "cartas": [
+
+    { "id": "NB-001", "nome": "Brotinelo", "categoria": "besta", "tipo": "flora", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "brasa", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Chicote de Broto", "custo": ["flora"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-002", "nome": "Folhagor", "categoria": "besta", "tipo": "flora", "estagio": 1, "evolui_de": "NB-001", "omega": false, "ps": 90, "fraqueza": "brasa", "recuo": 1, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Lâmina Foliar", "custo": ["flora", "flora"], "dano": 40, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-003", "nome": "Selvarok", "categoria": "besta", "tipo": "flora", "estagio": 2, "evolui_de": "NB-002", "omega": false, "ps": 150, "fraqueza": "brasa", "recuo": 3, "raridade": 3,
+      "habilidade": { "nome": "Fotossíntese", "modo": "ativada", "texto": "1x por turno, cure 20 de dano deste monstro.",
+        "efeitos": [ { "bloco": "curar", "valor": 20, "alvo": "self" } ] },
+      "ataques": [
+        { "nome": "Fúria da Selva", "custo": ["flora", "flora", "flora", "qualquer"], "dano": 100, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-004", "nome": "Cogumim", "categoria": "besta", "tipo": "flora", "estagio": 0, "evolui_de": null, "omega": false, "ps": 70, "fraqueza": "brasa", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Esporo Sonolento", "custo": ["flora"], "dano": 10, "texto": "O defensor fica Adormecido.",
+          "efeitos": [ { "bloco": "status", "status": "adormecido", "alvo": "defensor" } ] }
+      ] },
+
+    { "id": "NB-005", "nome": "Espinhel", "categoria": "besta", "tipo": "flora", "estagio": 0, "evolui_de": null, "omega": false, "ps": 80, "fraqueza": "brasa", "recuo": 2, "raridade": 2,
+      "habilidade": { "nome": "Casca de Espinhos", "modo": "passiva", "texto": "Se este monstro estiver na Linha de Frente e sofrer dano de ataque, o atacante sofre 20.",
+        "efeitos": [ { "bloco": "retaliacao", "valor": 20 } ] },
+      "ataques": [
+        { "nome": "Agulhada", "custo": ["flora", "flora"], "dano": 30, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-006", "nome": "Selvarok Ω", "categoria": "besta", "tipo": "flora", "estagio": 0, "evolui_de": null, "omega": true, "ps": 140, "fraqueza": "brasa", "recuo": 3, "raridade": 4,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Raízes Vorazes", "custo": ["flora", "flora"], "dano": 40, "texto": "Cure 20 deste monstro.",
+          "efeitos": [ { "bloco": "curar", "valor": 20, "alvo": "self" } ] },
+        { "nome": "Colapso Verde", "custo": ["flora", "flora", "flora", "flora"], "dano": 130, "texto": "Este monstro sofre 30.",
+          "efeitos": [ { "bloco": "auto_dano", "valor": 30 } ] }
+      ] },
+
+    { "id": "NB-007", "nome": "Fagulho", "categoria": "besta", "tipo": "brasa", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "mare", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Faísca Quente", "custo": ["brasa"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-008", "nome": "Pirandra", "categoria": "besta", "tipo": "brasa", "estagio": 1, "evolui_de": "NB-007", "omega": false, "ps": 90, "fraqueza": "mare", "recuo": 2, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Bafo Ardente", "custo": ["brasa", "brasa", "qualquer"], "dano": 60, "texto": "Joga moeda: cara = defensor Queimado.",
+          "efeitos": [ { "bloco": "moeda", "se_cara": [ { "bloco": "status", "status": "queimado", "alvo": "defensor" } ], "se_coroa": [] } ] }
+      ] },
+
+    { "id": "NB-009", "nome": "Vulkragon", "categoria": "besta", "tipo": "brasa", "estagio": 2, "evolui_de": "NB-008", "omega": false, "ps": 160, "fraqueza": "mare", "recuo": 3, "raridade": 3,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Erupção Total", "custo": ["brasa", "brasa", "brasa", "brasa"], "dano": 140, "texto": "Descarte 2 energias Brasa deste monstro.",
+          "efeitos": [ { "bloco": "descartar_energia_self", "qtd": 2, "tipo": "brasa" } ] }
+      ] },
+
+    { "id": "NB-010", "nome": "Cinzelim", "categoria": "besta", "tipo": "brasa", "estagio": 0, "evolui_de": null, "omega": false, "ps": 50, "fraqueza": "mare", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Cinza Irritante", "custo": ["brasa"], "dano": 10, "texto": "O defensor fica Queimado.",
+          "efeitos": [ { "bloco": "status", "status": "queimado", "alvo": "defensor" } ] }
+      ] },
+
+    { "id": "NB-011", "nome": "Lavaboi", "categoria": "besta", "tipo": "brasa", "estagio": 0, "evolui_de": null, "omega": false, "ps": 100, "fraqueza": "mare", "recuo": 3, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Investida Magmática", "custo": ["brasa", "brasa", "brasa"], "dano": 60, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-012", "nome": "Vulkragon Ω", "categoria": "besta", "tipo": "brasa", "estagio": 0, "evolui_de": null, "omega": true, "ps": 140, "fraqueza": "mare", "recuo": 2, "raridade": 4,
+      "habilidade": { "nome": "Coração de Magma", "modo": "ativada", "texto": "1x por turno, pegue 1 energia Brasa do Núcleo de Mana e anexe a este monstro.",
+        "efeitos": [ { "bloco": "anexar_mana_nucleo", "tipo": "brasa", "alvo": "self", "qtd": 1 } ] },
+      "ataques": [
+        { "nome": "Tempestade de Fogo", "custo": ["brasa", "brasa", "brasa"], "dano": 90, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-013", "nome": "Gotari", "categoria": "besta", "tipo": "mare", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "faisca", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Jato d'Água", "custo": ["mare"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-014", "nome": "Ondaluz", "categoria": "besta", "tipo": "mare", "estagio": 1, "evolui_de": "NB-013", "omega": false, "ps": 90, "fraqueza": "faisca", "recuo": 1, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Pulso de Maré", "custo": ["mare", "mare"], "dano": 50, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-015", "nome": "Abissarion", "categoria": "besta", "tipo": "mare", "estagio": 2, "evolui_de": "NB-014", "omega": false, "ps": 150, "fraqueza": "faisca", "recuo": 2, "raridade": 3,
+      "habilidade": { "nome": "Correnteza", "modo": "gatilho_evoluir", "texto": "Ao jogar esta carta da mão para evoluir, você pode trocar o monstro da Linha de Frente do oponente por um da Reserva dele.",
+        "efeitos": [ { "bloco": "gust_oponente", "opcional": true } ] },
+      "ataques": [
+        { "nome": "Vórtice Abissal", "custo": ["mare", "mare", "mare"], "dano": 90, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-016", "nome": "Concharrico", "categoria": "besta", "tipo": "mare", "estagio": 0, "evolui_de": null, "omega": false, "ps": 80, "fraqueza": "faisca", "recuo": 2, "raridade": 2,
+      "habilidade": { "nome": "Concha Rígida", "modo": "passiva", "texto": "Este monstro sofre −10 de dano de ataques.",
+        "efeitos": [ { "bloco": "reducao_dano", "valor": 10 } ] },
+      "ataques": [
+        { "nome": "Estilhaço de Concha", "custo": ["mare", "mare"], "dano": 30, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-017", "nome": "Peixelor", "categoria": "besta", "tipo": "mare", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "faisca", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Cardume Veloz", "custo": ["mare", "qualquer"], "dano": 20, "texto": "Joga 2 moedas: +20 por cara.",
+          "efeitos": [ { "bloco": "moedas_dano", "qtd": 2, "dano_por_cara": 20 } ] }
+      ] },
+
+    { "id": "NB-018", "nome": "Abissarion Ω", "categoria": "besta", "tipo": "mare", "estagio": 0, "evolui_de": null, "omega": true, "ps": 150, "fraqueza": "faisca", "recuo": 3, "raridade": 4,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Prisão de Bolhas", "custo": ["mare", "mare"], "dano": 40, "texto": "O defensor não pode recuar no próximo turno.",
+          "efeitos": [ { "bloco": "bloquear_recuo_defensor" } ] },
+        { "nome": "Tsunami", "custo": ["mare", "mare", "mare", "qualquer"], "dano": 120, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-019", "nome": "Voltim", "categoria": "besta", "tipo": "faisca", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "rocha", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Choquinho", "custo": ["faisca"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-020", "nome": "Raiotem", "categoria": "besta", "tipo": "faisca", "estagio": 1, "evolui_de": "NB-019", "omega": false, "ps": 90, "fraqueza": "rocha", "recuo": 1, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Descarga", "custo": ["faisca", "faisca"], "dano": 40, "texto": "Joga moeda: cara = defensor Paralisado.",
+          "efeitos": [ { "bloco": "moeda", "se_cara": [ { "bloco": "status", "status": "paralisado", "alvo": "defensor" } ], "se_coroa": [] } ] }
+      ] },
+
+    { "id": "NB-021", "nome": "Tempestrix", "categoria": "besta", "tipo": "faisca", "estagio": 2, "evolui_de": "NB-020", "omega": false, "ps": 140, "fraqueza": "rocha", "recuo": 1, "raridade": 3,
+      "habilidade": { "nome": "Sobrecarga", "modo": "passiva", "texto": "Os ataques deste monstro custam 1 ⭐ a menos se você tiver 3 monstros na Reserva.",
+        "efeitos": [ { "bloco": "custo_reduzido_se", "condicao": "reserva_cheia", "qtd": 1 } ] },
+      "ataques": [
+        { "nome": "Relâmpago Cadente", "custo": ["faisca", "faisca", "faisca"], "dano": 90, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-022", "nome": "Zumbizz", "categoria": "besta", "tipo": "faisca", "estagio": 0, "evolui_de": null, "omega": false, "ps": 50, "fraqueza": "rocha", "recuo": 0, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Zumbido Estático", "custo": ["faisca"], "dano": 10, "texto": "Joga moeda: cara = devolva 1 energia do defensor para o Núcleo de Mana do oponente.",
+          "efeitos": [ { "bloco": "moeda", "se_cara": [ { "bloco": "devolver_energia_defensor", "qtd": 1 } ], "se_coroa": [] } ] }
+      ] },
+
+    { "id": "NB-023", "nome": "Magnetauro", "categoria": "besta", "tipo": "faisca", "estagio": 0, "evolui_de": null, "omega": false, "ps": 90, "fraqueza": "rocha", "recuo": 2, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Chifre Eletrizado", "custo": ["faisca", "faisca", "qualquer"], "dano": 50, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-024", "nome": "Tempestrix Ω", "categoria": "besta", "tipo": "faisca", "estagio": 0, "evolui_de": null, "omega": true, "ps": 130, "fraqueza": "rocha", "recuo": 1, "raridade": 4,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Ricochete", "custo": ["faisca"], "dano": 30, "texto": null, "efeitos": [] },
+        { "nome": "Circuito Máximo", "custo": ["faisca", "faisca", "faisca"], "dano": 0, "texto": "Cause 60 a um monstro do oponente à sua escolha (Reserva incluída).",
+          "efeitos": [ { "bloco": "dano_alvo_escolha", "valor": 60 } ] }
+      ] },
+
+    { "id": "NB-025", "nome": "Sonim", "categoria": "besta", "tipo": "mente", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "sombra", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Toque Psíquico", "custo": ["mente"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-026", "nome": "Oraculix", "categoria": "besta", "tipo": "mente", "estagio": 1, "evolui_de": "NB-025", "omega": false, "ps": 80, "fraqueza": "sombra", "recuo": 1, "raridade": 2,
+      "habilidade": { "nome": "Premonição", "modo": "ativada", "texto": "1x por turno, olhe a carta do topo do seu baralho.",
+        "efeitos": [ { "bloco": "olhar_topo", "qtd": 1, "reordenar": false } ] },
+      "ataques": [
+        { "nome": "Onda Mental", "custo": ["mente", "mente"], "dano": 40, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-027", "nome": "Astrallume", "categoria": "besta", "tipo": "mente", "estagio": 2, "evolui_de": "NB-026", "omega": false, "ps": 140, "fraqueza": "sombra", "recuo": 2, "raridade": 3,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Explosão Astral", "custo": ["mente", "mente", "qualquer"], "dano": 60, "texto": "+20 por energia Mente extra anexada além do custo.",
+          "efeitos": [ { "bloco": "dano_por_energia_extra", "tipo": "mente", "valor": 20 } ] }
+      ] },
+
+    { "id": "NB-028", "nome": "Hipnolho", "categoria": "besta", "tipo": "mente", "estagio": 0, "evolui_de": null, "omega": false, "ps": 70, "fraqueza": "sombra", "recuo": 1, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Olhar Hipnótico", "custo": ["mente"], "dano": 0, "texto": "O defensor fica Adormecido (sem dano).",
+          "efeitos": [ { "bloco": "status", "status": "adormecido", "alvo": "defensor" } ] },
+        { "nome": "Pesadelo", "custo": ["mente", "mente"], "dano": 30, "texto": "+30 se o defensor estiver Adormecido.",
+          "efeitos": [ { "bloco": "dano_bonus_se", "condicao": "defensor_adormecido", "valor": 30 } ] }
+      ] },
+
+    { "id": "NB-029", "nome": "Levitoad", "categoria": "besta", "tipo": "mente", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "sombra", "recuo": 1, "raridade": 1,
+      "habilidade": { "nome": "Levitação", "modo": "passiva", "texto": "Custo de recuo 0 se este monstro tiver energia Mente anexada.",
+        "efeitos": [ { "bloco": "recuo_zero_se", "condicao": "tem_energia_tipo", "tipo": "mente" } ] },
+      "ataques": [
+        { "nome": "Salto Etéreo", "custo": ["mente", "qualquer"], "dano": 30, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-030", "nome": "Astrallume Ω", "categoria": "besta", "tipo": "mente", "estagio": 0, "evolui_de": null, "omega": true, "ps": 140, "fraqueza": "sombra", "recuo": 2, "raridade": 4,
+      "habilidade": { "nome": "Elo Cósmico", "modo": "ativada", "texto": "1x por turno, mova 1 energia Mente entre seus monstros.",
+        "efeitos": [ { "bloco": "mover_energia", "tipo": "mente", "qtd": 1 } ] },
+      "ataques": [
+        { "nome": "Colapso Estelar", "custo": ["mente", "mente", "mente"], "dano": 100, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-031", "nome": "Pedrik", "categoria": "besta", "tipo": "rocha", "estagio": 0, "evolui_de": null, "omega": false, "ps": 70, "fraqueza": "mente", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Soco de Pedra", "custo": ["rocha"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-032", "nome": "Granitor", "categoria": "besta", "tipo": "rocha", "estagio": 1, "evolui_de": "NB-031", "omega": false, "ps": 100, "fraqueza": "mente", "recuo": 3, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Avalanche", "custo": ["rocha", "rocha", "qualquer"], "dano": 60, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-033", "nome": "Titanólito", "categoria": "besta", "tipo": "rocha", "estagio": 2, "evolui_de": "NB-032", "omega": false, "ps": 170, "fraqueza": "mente", "recuo": 4, "raridade": 3,
+      "habilidade": { "nome": "Pele de Montanha", "modo": "passiva", "texto": "Este monstro sofre −20 de dano de ataques.",
+        "efeitos": [ { "bloco": "reducao_dano", "valor": 20 } ] },
+      "ataques": [
+        { "nome": "Terremoto", "custo": ["rocha", "rocha", "rocha", "qualquer"], "dano": 110, "texto": "Cause 10 a cada monstro da SUA Reserva.",
+          "efeitos": [ { "bloco": "dano_reserva_propria", "valor": 10 } ] }
+      ] },
+
+    { "id": "NB-034", "nome": "Garrancho", "categoria": "besta", "tipo": "rocha", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "mente", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Golpe Duplo", "custo": ["rocha"], "dano": 0, "texto": "Joga 2 moedas: 10 por cara.",
+          "efeitos": [ { "bloco": "moedas_dano", "qtd": 2, "dano_por_cara": 10 } ] },
+        { "nome": "Quebra-Guarda", "custo": ["rocha", "rocha"], "dano": 40, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-035", "nome": "Escavurso", "categoria": "besta", "tipo": "rocha", "estagio": 0, "evolui_de": null, "omega": false, "ps": 90, "fraqueza": "mente", "recuo": 2, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Garra Subterrânea", "custo": ["rocha", "rocha"], "dano": 40, "texto": "Este ataque ignora efeitos que reduzem dano no defensor.",
+          "efeitos": [ { "bloco": "ignorar_reducao" } ] }
+      ] },
+
+    { "id": "NB-036", "nome": "Titanólito Ω", "categoria": "besta", "tipo": "rocha", "estagio": 0, "evolui_de": null, "omega": true, "ps": 160, "fraqueza": "mente", "recuo": 4, "raridade": 4,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Muralha Viva", "custo": ["rocha", "rocha"], "dano": 30, "texto": "Este monstro sofre −30 de dano de ataques no próximo turno.",
+          "efeitos": [ { "bloco": "reduzir_dano_self", "valor": 30, "duracao": "proximo_turno" } ] },
+        { "nome": "Punho Sísmico", "custo": ["rocha", "rocha", "rocha", "rocha"], "dano": 140, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-037", "nome": "Noctim", "categoria": "besta", "tipo": "sombra", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "rocha", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Arranhão Sombrio", "custo": ["sombra"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-038", "nome": "Umbrarat", "categoria": "besta", "tipo": "sombra", "estagio": 1, "evolui_de": "NB-037", "omega": false, "ps": 90, "fraqueza": "rocha", "recuo": 1, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Presas Venenosas", "custo": ["sombra", "sombra"], "dano": 40, "texto": "O defensor fica Envenenado.",
+          "efeitos": [ { "bloco": "status", "status": "envenenado", "alvo": "defensor" } ] }
+      ] },
+
+    { "id": "NB-039", "nome": "Reinoturno", "categoria": "besta", "tipo": "sombra", "estagio": 2, "evolui_de": "NB-038", "omega": false, "ps": 140, "fraqueza": "rocha", "recuo": 2, "raridade": 3,
+      "habilidade": { "nome": "Manto da Noite", "modo": "passiva", "texto": "Se o defensor estiver Envenenado, os ataques deste monstro causam +30.",
+        "efeitos": [ { "bloco": "bonus_dano_se", "condicao": "defensor_envenenado", "valor": 30 } ] },
+      "ataques": [
+        { "nome": "Lâmina do Eclipse", "custo": ["sombra", "sombra", "qualquer"], "dano": 70, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-040", "nome": "Espectrolho", "categoria": "besta", "tipo": "sombra", "estagio": 0, "evolui_de": null, "omega": false, "ps": 50, "fraqueza": "rocha", "recuo": 1, "raridade": 2,
+      "habilidade": { "nome": "Intangível", "modo": "passiva", "texto": "Joga moeda quando este monstro for atacado; cara = previne todo o dano. (1x por turno do oponente.)",
+        "efeitos": [ { "bloco": "intangivel_moeda" } ] },
+      "ataques": [
+        { "nome": "Sussurro Maldito", "custo": ["sombra", "sombra"], "dano": 30, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-041", "nome": "Corvomau", "categoria": "besta", "tipo": "sombra", "estagio": 0, "evolui_de": null, "omega": false, "ps": 70, "fraqueza": "rocha", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Bico Ladrão", "custo": ["sombra"], "dano": 20, "texto": "Se este ataque nocautear o defensor, compre 2 cartas.",
+          "efeitos": [ { "bloco": "comprar_se_nocaute", "qtd": 2 } ] }
+      ] },
+
+    { "id": "NB-042", "nome": "Reinoturno Ω", "categoria": "besta", "tipo": "sombra", "estagio": 0, "evolui_de": null, "omega": true, "ps": 140, "fraqueza": "rocha", "recuo": 2, "raridade": 4,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Toxina Profunda", "custo": ["sombra", "sombra"], "dano": 30, "texto": "O defensor fica Envenenado (sofre 20 em vez de 10 entre turnos).",
+          "efeitos": [ { "bloco": "status", "status": "envenenado", "alvo": "defensor", "dano_checkup": 20 } ] },
+        { "nome": "Julgamento Noturno", "custo": ["sombra", "sombra", "sombra"], "dano": 90, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-043", "nome": "Parafusim", "categoria": "besta", "tipo": "aco", "estagio": 0, "evolui_de": null, "omega": false, "ps": 70, "fraqueza": "brasa", "recuo": 2, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Engrenada", "custo": ["aco"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-044", "nome": "Blindobô", "categoria": "besta", "tipo": "aco", "estagio": 1, "evolui_de": "NB-043", "omega": false, "ps": 110, "fraqueza": "brasa", "recuo": 3, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Prensa Hidráulica", "custo": ["aco", "aco", "qualquer"], "dano": 60, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-045", "nome": "Fortalezaur", "categoria": "besta", "tipo": "aco", "estagio": 2, "evolui_de": "NB-044", "omega": false, "ps": 160, "fraqueza": "brasa", "recuo": 4, "raridade": 3,
+      "habilidade": { "nome": "Liga Reforçada", "modo": "passiva", "texto": "Este monstro não pode ficar Envenenado nem Queimado.",
+        "efeitos": [ { "bloco": "imune_status", "lista": ["envenenado", "queimado"] } ] },
+      "ataques": [
+        { "nome": "Canhão Pesado", "custo": ["aco", "aco", "aco", "qualquer"], "dano": 120, "texto": "Este monstro não pode atacar no seu próximo turno.",
+          "efeitos": [ { "bloco": "bloquear_proprio_ataque" } ] }
+      ] },
+
+    { "id": "NB-046", "nome": "Latinha", "categoria": "besta", "tipo": "aco", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "brasa", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Reciclar", "custo": ["aco"], "dano": 0, "texto": "Cure 20 deste monstro.",
+          "efeitos": [ { "bloco": "curar", "valor": 20, "alvo": "self" } ] },
+        { "nome": "Batida Metálica", "custo": ["aco", "aco"], "dano": 30, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-047", "nome": "Gyrodrone", "categoria": "besta", "tipo": "aco", "estagio": 0, "evolui_de": null, "omega": false, "ps": 70, "fraqueza": "brasa", "recuo": 0, "raridade": 2,
+      "habilidade": { "nome": "Voo Estável", "modo": "passiva", "texto": "Custo de recuo 0.",
+        "efeitos": [ { "bloco": "recuo_zero_se", "condicao": "sempre" } ] },
+      "ataques": [
+        { "nome": "Hélice Cortante", "custo": ["aco", "aco"], "dano": 40, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-048", "nome": "Fortalezaur Ω", "categoria": "besta", "tipo": "aco", "estagio": 0, "evolui_de": null, "omega": true, "ps": 150, "fraqueza": "brasa", "recuo": 3, "raridade": 4,
+      "habilidade": { "nome": "Escudo Automático", "modo": "passiva", "texto": "Este monstro sofre −10 de dano de ataques.",
+        "efeitos": [ { "bloco": "reducao_dano", "valor": 10 } ] },
+      "ataques": [
+        { "nome": "Míssil Guiado", "custo": ["aco", "aco", "aco"], "dano": 0, "texto": "Cause 50 a um monstro do oponente à sua escolha.",
+          "efeitos": [ { "bloco": "dano_alvo_escolha", "valor": 50 } ] }
+      ] },
+
+    { "id": "NB-049", "nome": "Ovolisco", "categoria": "besta", "tipo": "mito", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": null, "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Cabeçada", "custo": ["qualquer"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-050", "nome": "Dracolim", "categoria": "besta", "tipo": "mito", "estagio": 1, "evolui_de": "NB-049", "omega": false, "ps": 100, "fraqueza": null, "recuo": 2, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Sopro Primordial", "custo": ["brasa", "mare"], "dano": 50, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-051", "nome": "Aetherion", "categoria": "besta", "tipo": "mito", "estagio": 2, "evolui_de": "NB-050", "omega": false, "ps": 160, "fraqueza": null, "recuo": 3, "raridade": 3,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Fúria do Nexus", "custo": ["brasa", "brasa", "mare", "mare"], "dano": 150, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-052", "nome": "Wyrmito", "categoria": "besta", "tipo": "mito", "estagio": 0, "evolui_de": null, "omega": false, "ps": 70, "fraqueza": null, "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Mordida Ancestral", "custo": ["faisca", "sombra"], "dano": 40, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-053", "nome": "Serpelume", "categoria": "besta", "tipo": "mito", "estagio": 0, "evolui_de": null, "omega": false, "ps": 90, "fraqueza": null, "recuo": 2, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Espiral Mística", "custo": ["mare", "mente"], "dano": 40, "texto": "Cure 20 deste monstro.",
+          "efeitos": [ { "bloco": "curar", "valor": 20, "alvo": "self" } ] }
+      ] },
+
+    { "id": "NB-054", "nome": "Aetherion Ω", "categoria": "besta", "tipo": "mito", "estagio": 0, "evolui_de": null, "omega": true, "ps": 150, "fraqueza": null, "recuo": 3, "raridade": 4,
+      "habilidade": { "nome": "Presença Mítica", "modo": "passiva", "texto": "Os ataques deste monstro não são afetados por habilidades do defensor.",
+        "efeitos": [ { "bloco": "ignora_habilidades_defensor" } ] },
+      "ataques": [
+        { "nome": "Ruptura Dimensional", "custo": ["mente", "sombra", "qualquer"], "dano": 100, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-055", "nome": "Fofurelho", "categoria": "besta", "tipo": "neutro", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "rocha", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Plaquinha", "custo": ["qualquer"], "dano": 10, "texto": "Joga moeda: cara = o defensor não pode atacar no próximo turno.",
+          "efeitos": [ { "bloco": "moeda", "se_cara": [ { "bloco": "bloquear_ataque_defensor" } ], "se_coroa": [] } ] }
+      ] },
+
+    { "id": "NB-056", "nome": "Saltarelho", "categoria": "besta", "tipo": "neutro", "estagio": 1, "evolui_de": "NB-055", "omega": false, "ps": 90, "fraqueza": "rocha", "recuo": 1, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Pulo Duplo", "custo": ["qualquer", "qualquer"], "dano": 30, "texto": "Joga moeda: cara = +30.",
+          "efeitos": [ { "bloco": "moedas_dano", "qtd": 1, "dano_por_cara": 30 } ] }
+      ] },
+
+    { "id": "NB-057", "nome": "Rugidonte", "categoria": "besta", "tipo": "neutro", "estagio": 0, "evolui_de": null, "omega": false, "ps": 100, "fraqueza": "rocha", "recuo": 3, "raridade": 2,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Atropelo", "custo": ["qualquer", "qualquer", "qualquer"], "dano": 60, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-058", "nome": "Plumazul", "categoria": "besta", "tipo": "neutro", "estagio": 0, "evolui_de": null, "omega": false, "ps": 60, "fraqueza": "rocha", "recuo": 1, "raridade": 1,
+      "habilidade": { "nome": "Vento de Cauda", "modo": "ativada", "texto": "1x por turno, se este monstro estiver na Reserva, você pode reduzir em 1 o custo de recuo da sua Linha de Frente neste turno.",
+        "efeitos": [ { "bloco": "reduzir_recuo_lf", "qtd": 1, "requer_posicao": "reserva" } ] },
+      "ataques": [
+        { "nome": "Bicada", "custo": ["qualquer"], "dano": 20, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-059", "nome": "Melodina", "categoria": "besta", "tipo": "neutro", "estagio": 0, "evolui_de": null, "omega": false, "ps": 70, "fraqueza": "rocha", "recuo": 1, "raridade": 1,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Canção Calmante", "custo": ["qualquer"], "dano": 0, "texto": "Cure 30 de um dos seus monstros.",
+          "efeitos": [ { "bloco": "curar", "valor": 30, "alvo": "escolha_proprio" } ] },
+        { "nome": "Grito Agudo", "custo": ["qualquer", "qualquer"], "dano": 30, "texto": null, "efeitos": [] }
+      ] },
+
+    { "id": "NB-060", "nome": "Rugidonte Ω", "categoria": "besta", "tipo": "neutro", "estagio": 0, "evolui_de": null, "omega": true, "ps": 140, "fraqueza": "rocha", "recuo": 3, "raridade": 4,
+      "habilidade": null,
+      "ataques": [
+        { "nome": "Investida", "custo": ["qualquer", "qualquer"], "dano": 40, "texto": null, "efeitos": [] },
+        { "nome": "Fúria Selvagem", "custo": ["qualquer", "qualquer", "qualquer", "qualquer"], "dano": 80, "texto": "+40 se você tiver menos Selos de Vitória que o oponente.",
+          "efeitos": [ { "bloco": "dano_bonus_se", "condicao": "menos_selos", "valor": 40 } ] }
+      ] },
+
+    { "id": "AL-001", "nome": "Professora Íris", "categoria": "mentor", "raridade": 2,
+      "texto": "Descarte sua mão e compre 3 cartas.",
+      "efeitos": [ { "bloco": "descartar_mao_comprar", "qtd": 3 } ] },
+
+    { "id": "AL-002", "nome": "Recruta Bruno", "categoria": "mentor", "raridade": 1,
+      "texto": "Compre 2 cartas.",
+      "efeitos": [ { "bloco": "comprar", "qtd": 2 } ] },
+
+    { "id": "AL-003", "nome": "Curandeira Maya", "categoria": "mentor", "raridade": 1,
+      "texto": "Cure 50 de dano de um dos seus monstros.",
+      "efeitos": [ { "bloco": "curar", "valor": 50, "alvo": "escolha_proprio" } ] },
+
+    { "id": "AL-004", "nome": "Capitão Vento", "categoria": "mentor", "raridade": 2,
+      "texto": "Troque a Besta da Linha de Frente do oponente por uma da Reserva dele (o oponente escolhe qual entra).",
+      "efeitos": [ { "bloco": "gust_oponente" } ] },
+
+    { "id": "AL-005", "nome": "Ferreiro Odan", "categoria": "mentor", "raridade": 1,
+      "texto": "Escolha 1 dos seus monstros de Aço: ele sofre −20 de dano de ataques até o fim do próximo turno do oponente.",
+      "efeitos": [ { "bloco": "reducao_dano_temporaria", "tipo_alvo": "aco", "valor": 20, "duracao": "proximo_turno_oponente" } ] },
+
+    { "id": "AL-006", "nome": "Maré-Mestra Suri", "categoria": "mentor", "raridade": 2,
+      "texto": "Joga uma moeda: se cara, pegue 2 energias Maré do Núcleo de Mana e anexe a 1 monstro de Maré da sua Reserva.",
+      "efeitos": [ { "bloco": "moeda", "se_cara": [ { "bloco": "anexar_mana_nucleo", "tipo": "mare", "qtd": 2, "alvo": "reserva_tipo", "tipo_alvo": "mare" } ], "se_coroa": [] } ] },
+
+    { "id": "AL-007", "nome": "Rastreadora Kova", "categoria": "mentor", "raridade": 1,
+      "texto": "Procure no seu baralho 1 monstro Básico aleatório e coloque-o na sua mão. Embaralhe o baralho.",
+      "efeitos": [ { "bloco": "buscar_basico" } ] },
+
+    { "id": "AL-008", "nome": "Chamado do Nexus", "categoria": "mentor", "raridade": 2,
+      "texto": "Só pode ser usada se você tiver 2+ Selos de Vitória a menos que o oponente. Compre 3 cartas.",
+      "condicao_uso": { "bloco": "condicao_selos", "diferenca_minima": 2 },
+      "efeitos": [ { "bloco": "comprar", "qtd": 3 } ] },
+
+    { "id": "AL-009", "nome": "Poção do Vale", "categoria": "item", "raridade": 1,
+      "texto": "Cure 20 de dano de um dos seus monstros.",
+      "efeitos": [ { "bloco": "curar", "valor": 20, "alvo": "escolha_proprio" } ] },
+
+    { "id": "AL-010", "nome": "Antídoto Universal", "categoria": "item", "raridade": 1,
+      "texto": "Remova todas as Condições Especiais da sua Besta da Linha de Frente.",
+      "efeitos": [ { "bloco": "remover_status", "alvo": "linha_frente_propria" } ] },
+
+    { "id": "AL-011", "nome": "Botas de Salto", "categoria": "item", "raridade": 1,
+      "texto": "Neste turno, o custo de recuo da sua Linha de Frente é reduzido em 1.",
+      "efeitos": [ { "bloco": "reduzir_recuo_lf", "qtd": 1 } ] },
+
+    { "id": "AL-012", "nome": "Cápsula de Captura", "categoria": "item", "raridade": 1,
+      "texto": "Joga uma moeda: se cara, procure no baralho 1 monstro Básico aleatório e coloque na mão.",
+      "efeitos": [ { "bloco": "moeda", "se_cara": [ { "bloco": "buscar_basico" } ], "se_coroa": [] } ] },
+
+    { "id": "AL-013", "nome": "Sino do Recuo", "categoria": "item", "raridade": 2,
+      "texto": "Troque sua Besta da Linha de Frente por uma da sua Reserva (sem pagar custo de recuo).",
+      "efeitos": [ { "bloco": "switch_proprio" } ] },
+
+    { "id": "AL-014", "nome": "Lente de Batalha", "categoria": "item", "raridade": 1,
+      "texto": "Olhe as 3 cartas do topo do seu baralho e devolva-as em qualquer ordem.",
+      "efeitos": [ { "bloco": "olhar_topo", "qtd": 3, "reordenar": true } ] },
+
+    { "id": "AL-015", "nome": "Amuleto Vital", "categoria": "ferramenta", "raridade": 1,
+      "texto": "O monstro com esta carta recebe +20 PS.",
+      "efeitos": [ { "bloco": "ps_bonus", "valor": 20 } ] },
+
+    { "id": "AL-016", "nome": "Garra Afiada", "categoria": "ferramenta", "raridade": 2,
+      "texto": "Os ataques do monstro com esta carta causam +10 de dano à Besta da Linha de Frente do oponente.",
+      "efeitos": [ { "bloco": "dano_bonus_ferramenta", "valor": 10 } ] },
+
+    { "id": "AL-017", "nome": "Manto Espinhoso", "categoria": "ferramenta", "raridade": 2,
+      "texto": "Se o monstro com esta carta estiver na Linha de Frente e sofrer dano de ataque, o atacante sofre 10.",
+      "efeitos": [ { "bloco": "retaliacao", "valor": 10 } ] },
+
+    { "id": "AL-018", "nome": "Relíquia de Âmbar", "categoria": "reliquia", "raridade": 2,
+      "texto": "Jogue como se fosse uma Besta Básica de 40 PS, tipo Neutro, sem ataques e sem custo de recuo (pode ser descartada da Linha de Frente a qualquer momento no seu turno). Se for nocauteada, o oponente NÃO marca Selo.",
+      "reliquia": { "ps": 40, "tipo": "neutro", "recuo": 0, "concede_selo": false } },
+
+    { "id": "AL-019", "nome": "Relíquia de Gelo", "categoria": "reliquia", "raridade": 2,
+      "texto": "Jogue como se fosse uma Besta Básica de 40 PS, tipo Neutro, sem ataques e sem custo de recuo (pode ser descartada da Linha de Frente a qualquer momento no seu turno). Se for nocauteada, o oponente NÃO marca Selo.",
+      "reliquia": { "ps": 40, "tipo": "neutro", "recuo": 0, "concede_selo": false } }
+  ]
+}

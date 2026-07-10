@@ -1,0 +1,15 @@
+{
+  "tipos": [
+    { "id": "flora",  "nome": "Flora",  "simbolo": "🌿", "cor": "#4caf50", "fraqueza": "brasa",  "tem_energia": true },
+    { "id": "brasa",  "nome": "Brasa",  "simbolo": "🔥", "cor": "#f44336", "fraqueza": "mare",   "tem_energia": true },
+    { "id": "mare",   "nome": "Maré",   "simbolo": "💧", "cor": "#2196f3", "fraqueza": "faisca", "tem_energia": true },
+    { "id": "faisca", "nome": "Faísca", "simbolo": "⚡", "cor": "#ffc107", "fraqueza": "rocha",  "tem_energia": true },
+    { "id": "mente",  "nome": "Mente",  "simbolo": "🔮", "cor": "#9c27b0", "fraqueza": "sombra", "tem_energia": true },
+    { "id": "rocha",  "nome": "Rocha",  "simbolo": "🪨", "cor": "#795548", "fraqueza": "mente",  "tem_energia": true },
+    { "id": "sombra", "nome": "Sombra", "simbolo": "🌑", "cor": "#37474f", "fraqueza": "rocha",  "tem_energia": true },
+    { "id": "aco",    "nome": "Aço",    "simbolo": "⚙️", "cor": "#78909c", "fraqueza": "brasa",  "tem_energia": true },
+    { "id": "mito",   "nome": "Mito",   "simbolo": "🐉", "cor": "#673ab7", "fraqueza": null,     "tem_energia": false },
+    { "id": "neutro", "nome": "Neutro", "simbolo": "⭐", "cor": "#9e9e9e", "fraqueza": "rocha",  "tem_energia": false }
+  ],
+  "custo_qualquer": "qualquer"
+}
