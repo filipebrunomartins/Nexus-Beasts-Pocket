@@ -1,0 +1,28 @@
+{
+  "decks": [
+    {
+      "id": "furia-vulcanica",
+      "nome": "Fúria Vulcânica",
+      "descricao": "Segure o início com Lavaboi/Cinzelim enquanto carrega Vulkragon Ω na Reserva; feche com Erupção Total.",
+      "tipos_mana": ["brasa"],
+      "cartas": [
+        "NB-007", "NB-007", "NB-008", "NB-008", "NB-009", "NB-009",
+        "NB-010", "NB-010", "NB-011", "NB-011", "NB-012",
+        "AL-001", "AL-001", "AL-002", "AL-002", "AL-003",
+        "AL-009", "AL-009", "AL-013", "AL-015"
+      ]
+    },
+    {
+      "id": "mare-constante",
+      "nome": "Maré Constante",
+      "descricao": "Concharrico tanka cedo; Suri acelera mana; Abissarion chega puxando alvos frágeis com Correnteza.",
+      "tipos_mana": ["mare"],
+      "cartas": [
+        "NB-013", "NB-013", "NB-014", "NB-014", "NB-015", "NB-015",
+        "NB-016", "NB-016", "NB-017", "NB-017", "NB-018",
+        "AL-001", "AL-001", "AL-006", "AL-006", "AL-004",
+        "AL-009", "AL-009", "AL-011", "AL-016"
+      ]
+    }
+  ]
+}

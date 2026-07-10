@@ -58,6 +58,14 @@ static func is_basic_beast(card: Dictionary) -> bool:
 	return card["categoria"] == "besta" and int(card.get("estagio", -1)) == 0
 
 
+const DECKS_PATH := "res://data/cards/decks.json"
+
+
+## Decks pré-montados (Parte 5): [{id, nome, tipos_mana, cartas}, ...]
+static func load_decks() -> Array:
+	return _read_json(DECKS_PATH).get("decks", [])
+
+
 static func _read_json(path: String) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
 	assert(file != null, "Não foi possível abrir %s" % path)
