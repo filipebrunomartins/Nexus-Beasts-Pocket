@@ -258,6 +258,10 @@ func _render_mao(eu: Dictionary) -> void:
 		var sub := _novo_label(18)
 		sub.text = _subtitulo_carta(card)
 		v.add_child(sub)
+		var lupa := _novo_label(18)
+		lupa.text = "🔍 ver"
+		v.add_child(lupa)
+		painel.gui_input.connect(_ao_tocar_carta_mao.bind(String(id)))
 		_mao_box.add_child(painel)
 
 
@@ -347,6 +351,29 @@ func _sufixo_alvo(acao: Dictionary, lado: int) -> String:
 		var p := Rules.jogador(state, lado)
 		return " → %s" % Rules.carta_de(db, p["reserva"][params["indice_reserva"]])["nome"]
 	return ""
+
+func _ao_tocar_carta_mao(event: InputEvent, card_id: String) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		_zoom_carta(card_id)
+
+
+## Overlay de zoom com a carta completa (CardRenderer); toque fecha.
+func _zoom_carta(card_id: String) -> void:
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.75)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.gui_input.connect(func(ev):
+		if ev is InputEventMouseButton and ev.pressed:
+			overlay.queue_free())
+	add_child(overlay)
+	var centro := CenterContainer.new()
+	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
+	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	overlay.add_child(centro)
+	var carta := CardRenderer.nova(db, card_id)
+	carta.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	centro.add_child(carta)
+
 
 # ============================================================ fluxo
 
