@@ -443,6 +443,21 @@ func _rodar_ia() -> void:
 	_apos_mudanca()
 
 
+## XP e progresso de missões ao fim de cada batalha.
+func _registrar_metajogo(venceu: bool) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	Missions.atualizar_dia(Save.dados, Time.get_date_string_from_system(), rng)
+	if venceu:
+		Missions.registrar_evento(Save.dados, "vencer_batalhas")
+		if Ctx.batalha.get("campanha", false):
+			Missions.registrar_evento(Save.dados, "vencer_campanha")
+	Missions.registrar_evento(Save.dados, "causar_dano",
+			int(Rules.jogador(state, lado_humano)["dano_causado"]))
+	Progression.registrar_batalha(Save.dados, venceu)
+	Save.salvar()
+
+
 func _mostrar_fim() -> void:
 	if _fim_notificado:
 		return
@@ -481,6 +496,7 @@ func _mostrar_fim() -> void:
 	btn.text = "Continuar"
 	btn.add_theme_font_size_override("font_size", 32)
 	btn.pressed.connect(func():
+		_registrar_metajogo(venceu)
 		batalha_terminou.emit(venceu, state)
 		if Ctx.batalha.get("campanha", false):
 			# A trilha da campanha processa o resultado ao ser recarregada.

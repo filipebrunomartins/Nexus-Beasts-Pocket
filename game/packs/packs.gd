@@ -7,6 +7,7 @@ var _lbl_timer: Label
 var _btn_abrir: Button
 var _btn_ampulheta: Button
 var _btn_bonus: Button
+var _btn_comprar: Button
 var _area_reveal: VBoxContainer
 var _cartas_pendentes: Array = []
 
@@ -51,6 +52,8 @@ func _ready() -> void:
 	botoes.add_child(_btn_ampulheta)
 	_btn_bonus = botao("", _abrir_bonus, 26)
 	botoes.add_child(_btn_bonus)
+	_btn_comprar = botao("", _comprar_com_moedas, 26)
+	botoes.add_child(_btn_comprar)
 
 	_area_reveal = VBoxContainer.new()
 	_area_reveal.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -85,6 +88,8 @@ func _atualizar() -> void:
 	var bonus := int(Save.dados.get("pacotes_bonus", 0))
 	_btn_bonus.visible = bonus > 0
 	_btn_bonus.text = "🎁 Abrir pacote bônus (×%d)" % bonus
+	_btn_comprar.text = "💰 Comprar pacote (%d moedas)" % PRECO_PACOTE_MOEDAS
+	_btn_comprar.disabled = int(Save.dados["moedas"]) < PRECO_PACOTE_MOEDAS
 
 
 func _usar_ampulheta() -> void:
@@ -100,9 +105,22 @@ func _abrir_pacote() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 	_cartas_pendentes = PackSystem.abrir(db, Save.dados, agora, rng)
+	Missions.registrar_evento(Save.dados, "abrir_pacotes")
 	Save.adicionar_cartas(_cartas_pendentes)
 	_btn_abrir.disabled = true
 	_revelar_proxima()
+
+
+## Pacote comprado com moedas (economia leve — só acelera a coleção).
+const PRECO_PACOTE_MOEDAS := 150
+
+func _comprar_com_moedas() -> void:
+	if int(Save.dados["moedas"]) < PRECO_PACOTE_MOEDAS:
+		return
+	Save.dados["moedas"] = int(Save.dados["moedas"]) - PRECO_PACOTE_MOEDAS
+	Save.dados["pacotes_bonus"] = int(Save.dados.get("pacotes_bonus", 0)) + 1
+	Save.salvar()
+	_atualizar()
 
 
 ## Pacote bônus (recompensa de campanha): abre sem consumir o timer.
@@ -115,6 +133,7 @@ func _abrir_bonus() -> void:
 	var timer_anterior := int(Save.dados["prox_pacote_ts"])
 	_cartas_pendentes = PackSystem.abrir(db, Save.dados, int(Time.get_unix_time_from_system()), rng)
 	Save.dados["prox_pacote_ts"] = timer_anterior  # bônus não mexe no timer
+	Missions.registrar_evento(Save.dados, "abrir_pacotes")
 	Save.adicionar_cartas(_cartas_pendentes)
 	_revelar_proxima()
 

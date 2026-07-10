@@ -17,6 +17,15 @@ func _ready() -> void:
 	voltar.pressed.disconnect(voltar.pressed.get_connections()[0]["callable"])
 	voltar.pressed.connect(func(): get_tree().change_scene_to_file("res://game/campaign/map_select.tscn"))
 
+	# Estrelas do mapa e resgate automático de marcos (pacotes bônus)
+	var estrelas_mapa := Campaign.estrelas_do_mapa(Save.dados, mapa)
+	var pacotes_marco := Campaign.resgatar_marcos(Save.dados, mapa)
+	if pacotes_marco > 0:
+		Save.salvar()
+	var lbl_estrelas := label("★ %d/18 — pacotes bônus a 6★, 12★ e 18★" % estrelas_mapa, 22, Color("#ffe082"))
+	lbl_estrelas.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	conteudo.add_child(lbl_estrelas)
+
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	conteudo.add_child(scroll)

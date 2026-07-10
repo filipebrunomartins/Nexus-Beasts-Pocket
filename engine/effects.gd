@@ -35,6 +35,8 @@ static func resolver_ataque(db: CardDB, state: Dictionary, lado: int, atacante: 
 	if dano_base > 0:
 		dano_causado = Rules.dano_no_defensor(db, state, lado, dano_base, ignora_reducao)
 		Rules.causar_dano(db, state, defensor, dano_causado)
+		var p_atk := Rules.jogador(state, lado)
+		p_atk["dano_causado"] = int(p_atk["dano_causado"]) + dano_causado
 		nocauteou = int(defensor["dano"]) >= Rules.ps_total(db, defensor)
 		# 3) Retaliação (Casca de Espinhos / Manto Espinhoso)
 		if dano_causado > 0:
@@ -125,6 +127,7 @@ static func executar(db: CardDB, state: Dictionary, lado: int, efeitos: Array, c
 				if alvo != null:
 					var dano := int(ef["valor"]) - Rules.reducao_de_dano(db, state, alvo, false)
 					Rules.causar_dano(db, state, alvo, maxi(dano, 0))
+					p["dano_causado"] = int(p["dano_causado"]) + maxi(dano, 0)
 
 			"dano_reserva_propria":
 				for besta in p["reserva"]:

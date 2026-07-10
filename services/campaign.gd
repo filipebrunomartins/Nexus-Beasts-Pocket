@@ -43,6 +43,35 @@ static func vitorias_no_mapa(save_dados: Dictionary, mapa: Dictionary) -> int:
 	return total
 
 
+## Marcos de estrelas por mapa que liberam pacotes bônus (7.5.6).
+const MARCOS_ESTRELAS := [6, 12, 18]
+
+
+static func estrelas_do_mapa(save_dados: Dictionary, mapa: Dictionary) -> int:
+	var total := 0
+	for d in mapa["desafiantes"]:
+		total += estrelas(save_dados, d["id"])
+	return total
+
+
+## Resgata automaticamente marcos de estrelas atingidos. Devolve nº de pacotes ganhos.
+static func resgatar_marcos(save_dados: Dictionary, mapa: Dictionary) -> int:
+	var camp: Dictionary = save_dados["campanha"]
+	if not camp.has("marcos"):
+		camp["marcos"] = {}
+	var resgatados: Array = camp["marcos"].get(mapa["id"], [])
+	var total := estrelas_do_mapa(save_dados, mapa)
+	var ganhos := 0
+	for marco in MARCOS_ESTRELAS:
+		if total >= marco and not resgatados.has(marco):
+			resgatados.append(marco)
+			ganhos += 1
+	if ganhos > 0:
+		camp["marcos"][mapa["id"]] = resgatados
+		save_dados["pacotes_bonus"] = int(save_dados.get("pacotes_bonus", 0)) + ganhos
+	return ganhos
+
+
 ## Estrelas da batalha: vencer / sem perder Besta / em até 12 turnos (7.5.6).
 static func calcular_estrelas(venceu_: bool, selos_oponente: int, turnos: int) -> int:
 	if not venceu_:

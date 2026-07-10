@@ -63,6 +63,7 @@ static func _novo_jogador(deck: Array, tipos_mana: Array) -> Dictionary:
 		"mentor_jogado": false,
 		"recuou": false,
 		"buffs": {},                   # ex.: {"reducao_recuo": 1}
+		"dano_causado": 0,             # total infligido ao oponente (missões)
 	}
 
 

@@ -11,8 +11,11 @@ func _ready() -> void:
 	var status := label("", 24, Color("#b0bec5"))
 	var agora := int(Time.get_unix_time_from_system())
 	var pacote_txt := "pronto!" if PackSystem.pode_abrir(Save.dados, agora) else _fmt_tempo(PackSystem.segundos_restantes(Save.dados, agora))
-	status.text = "💰 %d moedas   ⏳ %d ampulhetas   🎁 pacote: %s   📚 %d/79 cartas" % [
-		Save.dados["moedas"], Save.dados["ampulhetas"], pacote_txt, Save.total_cartas_unicas()]
+	status.text = "🏅 Nível %d   💰 %d moedas   ⏳ %d ampulhetas   🎁 pacote: %s   📚 %d/79" % [
+		Progression.nivel_de(int(Save.dados["xp"])), Save.dados["moedas"],
+		Save.dados["ampulhetas"], pacote_txt, Save.total_cartas_unicas()]
+	if not (Save.dados["titulos"] as Array).is_empty():
+		status.text += "   👑 " + String(Save.dados["titulos"][0])
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	conteudo.add_child(status)
 
