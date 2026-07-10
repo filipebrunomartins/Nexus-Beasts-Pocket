@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 
 Save="*res://services/save.gd"
 Ctx="*res://services/context.gd"
+Sfx="*res://services/sfx.gd"
 
 [display]
 

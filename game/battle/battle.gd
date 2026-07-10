@@ -26,6 +26,8 @@ var nome_oponente := "Oponente"
 var _ia_agindo := false
 var _fim_notificado := false
 var _regras_pos_aplicadas := false
+var _tutorial := false
+var _lbl_dica: Label
 
 # nós principais
 var _lbl_topo: Label
@@ -66,8 +68,11 @@ func _ready() -> void:
 		nome_oponente = "IA — " + String(sorteio["nome"])
 	state = Rules.nova_partida(db, deck_humano, deck_ia, tipos_humano, tipos_ia, randi(), -1)
 	ia = HeuristicAI.new(nivel_ia, randi())
+	_tutorial = Ctx.batalha.get("desafiante_id", "") == "m1_d1" and not Save.dados.get("tutorial_feito", false)
 	_aplicar_regras_chefe_pre_setup()
 	_construir_ui()
+	if _tutorial:
+		_mostrar_intro_tutorial()
 	_apos_mudanca()
 
 
@@ -157,6 +162,12 @@ func _construir_ui() -> void:
 	_mao_box = HBoxContainer.new()
 	_mao_box.add_theme_constant_override("separation", 8)
 	scroll_mao.add_child(_mao_box)
+
+	_lbl_dica = _novo_label(24)
+	_lbl_dica.add_theme_color_override("font_color", Color("#80deea"))
+	_lbl_dica.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_lbl_dica.visible = false
+	col.add_child(_lbl_dica)
 
 	var scroll_acoes := ScrollContainer.new()
 	scroll_acoes.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -329,13 +340,74 @@ func _render_acoes() -> void:
 		espera.text = "Aguardando o oponente..." if state["fase"] != "fim" else ""
 		_acoes_box.add_child(espera)
 		return
-	for acao in Rules.acoes_legais(db, state):
+	var acoes := Rules.acoes_legais(db, state)
+	for acao in acoes:
 		var btn := Button.new()
 		btn.text = _rotulo_acao(acao)
 		btn.add_theme_font_size_override("font_size", 26)
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.pressed.connect(_ao_escolher_acao.bind(acao))
 		_acoes_box.add_child(btn)
+	if _tutorial:
+		_atualizar_dica(acoes)
+
+
+## Dica contextual do tutorial (batalha contra Nino).
+func _atualizar_dica(acoes: Array) -> void:
+	var tipos := {}
+	for a in acoes:
+		tipos[a["tipo"]] = true
+	var dica := ""
+	if tipos.has("posicionar_ativo"):
+		dica = "💡 Escolha uma Besta Básica para ser sua Linha de Frente — ela é quem batalha."
+	elif tipos.has("promover"):
+		dica = "💡 Sua Besta caiu! Promova uma da Reserva para a Linha de Frente."
+	elif tipos.has("atacar"):
+		dica = "💡 Atacar encerra o seu turno. Nocautear uma Besta vale 1 Selo (Ω vale 2) — 3 Selos vencem!"
+	elif tipos.has("anexar_mana"):
+		dica = "💡 Anexe a mana do turno à sua Besta — os ataques exigem energia. A mana não é gasta ao atacar!"
+	elif tipos.has("colocar_reserva"):
+		dica = "💡 Coloque Bestas Básicas na Reserva: elas entram se a da frente cair."
+	else:
+		dica = "💡 Sem mais jogadas úteis? Encerre o turno."
+	_lbl_dica.text = dica
+	_lbl_dica.visible = true
+
+
+func _mostrar_intro_tutorial() -> void:
+	var paginas := [
+		"Bem-vindo ao NEXUS BEASTS! 🎴\n\nCada jogador tem um baralho de 20 cartas.\nVence quem marcar 3 SELOS DE VITÓRIA\n(nocautear Bestas do oponente).",
+		"⚡ NÚCLEO DE MANA\n\nVocê ganha 1 mana automática por turno —\nanexe a uma Besta para pagar ataques.\nA mana fica anexada: não é gasta ao atacar!",
+		"🃏 NO SEU TURNO\n\nColoque Básicos na Reserva, evolua, use\n1 Mentor, quantos Itens quiser... e ATAQUE\n(atacar encerra o turno). Boa sorte!",
+	]
+	_mostrar_pagina_tutorial(paginas, 0)
+
+
+func _mostrar_pagina_tutorial(paginas: Array, idx: int) -> void:
+	if idx >= paginas.size():
+		return
+	var overlay := ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.82)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(overlay)
+	var centro := CenterContainer.new()
+	centro.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.add_child(centro)
+	var caixa := VBoxContainer.new()
+	caixa.add_theme_constant_override("separation", 30)
+	centro.add_child(caixa)
+	var txt := _novo_label(30)
+	txt.text = paginas[idx]
+	txt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caixa.add_child(txt)
+	var btn := Button.new()
+	btn.text = "Entendi  (%d/%d)" % [idx + 1, paginas.size()]
+	btn.add_theme_font_size_override("font_size", 30)
+	btn.pressed.connect(func():
+		Sfx.tocar("click")
+		overlay.queue_free()
+		_mostrar_pagina_tutorial(paginas, idx + 1))
+	caixa.add_child(btn)
 
 # ============================================================ rótulos
 
@@ -424,7 +496,10 @@ func _zoom_carta(card_id: String) -> void:
 func _ao_escolher_acao(acao: Dictionary) -> void:
 	if MatchRunner.lado_agindo(state) != lado_humano:
 		return
+	Sfx.tocar("click")
+	var antes := _snapshot()
 	Rules.aplicar(db, state, acao)
+	_animar_diferencas(antes)
 	_apos_mudanca()
 
 
@@ -436,11 +511,76 @@ func _rodar_ia() -> void:
 			return
 		var lado := MatchRunner.lado_agindo(state)
 		var acao: Dictionary = ia.escolher(db, state, lado)
+		var antes := _snapshot()
 		if acao.is_empty() or not Rules.aplicar(db, state, acao):
 			Rules.aplicar(db, state, {"tipo": "encerrar_turno"})
 		_render()
+		_animar_diferencas(antes)
 	_ia_agindo = false
 	_apos_mudanca()
+
+# ============================================================ animações
+
+## Estado mínimo antes de uma ação, para animar as diferenças depois.
+func _snapshot() -> Dictionary:
+	var s := {"log": (state["log"] as Array).size()}
+	for lado in 2:
+		var ativo: Variant = Rules.jogador(state, lado)["ativo"]
+		s[lado] = {"dano": int(ativo["dano"]) if ativo != null else -1,
+				"carta": ativo["carta"] if ativo != null else ""}
+	return s
+
+
+func _animar_diferencas(antes: Dictionary) -> void:
+	for lado in 2:
+		var painel := _ativo_eu if lado == lado_humano else _ativo_op
+		var ativo: Variant = Rules.jogador(state, lado)["ativo"]
+		var dado: Dictionary = antes[lado]
+		if ativo != null and ativo["carta"] == dado["carta"] and int(dado["dano"]) >= 0:
+			var dif := int(ativo["dano"]) - int(dado["dano"])
+			if dif > 0:
+				Sfx.tocar("hit")
+				_tremer(painel)
+				_flutuar("−%d" % dif, Color("#ff5252"), painel)
+			elif dif < 0:
+				_flutuar("+%d" % -dif, Color("#69f0ae"), painel)
+		elif dado["carta"] != "" and (ativo == null or ativo["carta"] != dado["carta"]):
+			# saiu de cena: nocaute ou troca
+			if _log_novo(antes).find("nocauteado") >= 0:
+				Sfx.tocar("ko")
+	# Moedas jogadas nesta ação
+	var novo := _log_novo(antes)
+	if novo.find("CARA") >= 0 or novo.find("COROA") >= 0:
+		Sfx.tocar("coin")
+
+
+func _log_novo(antes: Dictionary) -> String:
+	var linhas: Array = (state["log"] as Array).slice(int(antes["log"]))
+	return " | ".join(PackedStringArray(linhas))
+
+
+func _tremer(painel: Control) -> void:
+	var origem := painel.position
+	var tween := create_tween()
+	for i in 3:
+		tween.tween_property(painel, "position", origem + Vector2(8, 0), 0.04)
+		tween.tween_property(painel, "position", origem - Vector2(8, 0), 0.04)
+	tween.tween_property(painel, "position", origem, 0.04)
+
+
+func _flutuar(texto: String, cor: Color, sobre: Control) -> void:
+	var lbl := Label.new()
+	lbl.text = texto
+	lbl.add_theme_font_size_override("font_size", 52)
+	lbl.add_theme_color_override("font_color", cor)
+	lbl.z_index = 100
+	add_child(lbl)
+	lbl.global_position = sobre.global_position + Vector2(sobre.size.x * 0.5 - 30, -10)
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(lbl, "global_position:y", lbl.global_position.y - 90, 0.8)
+	tween.tween_property(lbl, "modulate:a", 0.0, 0.8).set_delay(0.2)
+	tween.chain().tween_callback(lbl.queue_free)
 
 
 ## XP e progresso de missões ao fim de cada batalha.
@@ -455,6 +595,8 @@ func _registrar_metajogo(venceu: bool) -> void:
 	Missions.registrar_evento(Save.dados, "causar_dano",
 			int(Rules.jogador(state, lado_humano)["dano_causado"]))
 	Progression.registrar_batalha(Save.dados, venceu)
+	if _tutorial:
+		Save.dados["tutorial_feito"] = true
 	Save.salvar()
 
 
@@ -464,6 +606,7 @@ func _mostrar_fim() -> void:
 	_fim_notificado = true
 	var venceu := int(state["vencedor"]) == lado_humano
 	var empate := int(state["vencedor"]) == 2
+	Sfx.tocar("win" if venceu else "lose")
 
 	_overlay_fim = PanelContainer.new()
 	_overlay_fim.set_anchors_preset(Control.PRESET_CENTER)

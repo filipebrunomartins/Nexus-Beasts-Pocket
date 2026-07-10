@@ -25,8 +25,11 @@ func _ready() -> void:
 	meio.alignment = BoxContainer.ALIGNMENT_CENTER
 	conteudo.add_child(meio)
 
+	var rotulo_campanha := "🗺  CAMPANHA"
+	if not Save.dados.get("tutorial_feito", false):
+		rotulo_campanha += "  ← COMECE AQUI!"
 	for cfg in [
-		["🗺  CAMPANHA", "res://game/campaign/map_select.tscn"],
+		[rotulo_campanha, "res://game/campaign/map_select.tscn"],
 		["⚔  Batalha Livre", "res://game/battle/battle.tscn"],
 		["🎁  Loja de Pacotes", "res://game/packs/packs.tscn"],
 		["📚  Coleção", "res://game/collection/collection.tscn"],

@@ -147,6 +147,7 @@ func _revelar_proxima() -> void:
 		return
 	var id: String = _cartas_pendentes.pop_front()
 	var restam := _cartas_pendentes.size()
+	Sfx.tocar("reveal")
 
 	var centro := CenterContainer.new()
 	centro.size_flags_vertical = Control.SIZE_EXPAND_FILL
