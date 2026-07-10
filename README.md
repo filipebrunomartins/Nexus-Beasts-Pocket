@@ -592,4 +592,49 @@ A fenda de onde as Bestas vieram ao mundo. Decks "chefe" com regras especiais e 
 - Compras no app exigem conta de desenvolvedor Google/Apple, política de privacidade e, no Brasil, atenção à LGPD e ao ECA se o público incluir crianças (evite caixas de recompensa agressivas; mostre as probabilidades de raridade dos pacotes, como os jogos do gênero fazem).
 
 ---
+
+# ANEXO — O JOGO IMPLEMENTADO (V1)
+
+Este repositório contém a implementação completa da V1 descrita acima, feita em **Godot 4.7**.
+
+## Como rodar
+
+```bash
+# Desktop (para desenvolvimento)
+godot          # abre o editor
+godot .        # roda o jogo direto
+
+# Testes do motor de regras (98 testes headless)
+godot --headless -s tests/run_all.gd
+
+# Validador das 79 cartas
+godot --headless -s tools/validate_cards.gd
+
+# Simulador de balanceamento (IA vs IA)
+godot --headless -s tools/simulate.gd -- 500 12345 2
+```
+
+## Build Android
+
+Pré-requisitos: export templates do Godot 4.7 instalados, Android SDK e JDK 17 configurados no editor.
+
+```bash
+godot --headless --export-debug "Android" build/nexus-beasts-pocket.apk
+~/Android/Sdk/platform-tools/adb install -r build/nexus-beasts-pocket.apk
+```
+
+## Estrutura
+
+| Pasta | Conteúdo |
+|---|---|
+| `engine/` | Motor de regras puro (estado + ação → novo estado), sem UI — pronto para migrar ao servidor na V2 |
+| `data/` | As 79 cartas, tipos, decks iniciais e os 24 desafiantes da campanha **como dados JSON** |
+| `ai/` | IA heurística com os 4 níveis de dificuldade (seção 7.5.5) |
+| `game/` | Telas: home, batalha, coleção, pacotes, editor de deck, campanha, missões |
+| `services/` | Save local, pacotes, campanha, missões, progressão, SFX sintetizados |
+| `ui/` | Renderizador de carta orientado a dados (arte placeholder trocável) |
+| `tests/` | 98 testes headless de regras, efeitos, pacotes, campanha e missões |
+| `tools/` | Validador de cartas, simulador, galeria e utilitários de build |
+
+---
 *Documento criado como guia de design e desenvolvimento. Todos os nomes de monstros, cartas e o universo "Nexus Beasts" são originais e livres para você usar e modificar no seu projeto.*
