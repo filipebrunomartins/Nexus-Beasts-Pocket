@@ -15,7 +15,22 @@ func _ready() -> void:
 	var qtd := maxi(int(OS.get_environment("NBP_QTD")), 1) if OS.get_environment("NBP_QTD") != "" else 3
 	var intervalo := 2.0
 
-	# Preparação de contexto para telas que exigem (editor de deck)
+	# Preparação de contexto para telas que exigem
+	if OS.get_environment("NBP_CAMPANHA") != "":
+		# configura a batalha como a trilha faria, para o desafiante dado
+		var did := OS.get_environment("NBP_CAMPANHA")
+		var db := CardDB.load_default()
+		for mapa in Campaign.carregar():
+			for des in mapa["desafiantes"]:
+				if des["id"] == did and des.has("deck"):
+					Ctx.batalha = {
+						"campanha": true, "desafiante_id": did,
+						"deck_ia": des["deck"],
+						"tipos_ia": Rules.sugerir_tipos_mana(db, des["deck"]),
+						"nivel_ia": int(mapa["nivel_ia"]),
+						"nome_oponente": des["nome"],
+						"regras": des.get("regras", []), "fase_dupla": 1,
+					}
 	if OS.get_environment("NBP_DECK_EDIT") == "1":
 		var decks: Array = Save.dados["decks"]
 		Ctx.deck_em_edicao = decks.size()

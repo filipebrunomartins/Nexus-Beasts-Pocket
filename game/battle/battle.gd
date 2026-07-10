@@ -25,6 +25,7 @@ var nome_oponente := "Oponente"
 
 var _ia_agindo := false
 var _fim_notificado := false
+var _regras_pos_aplicadas := false
 
 # nós principais
 var _lbl_topo: Label
@@ -65,8 +66,35 @@ func _ready() -> void:
 		nome_oponente = "IA — " + String(sorteio["nome"])
 	state = Rules.nova_partida(db, deck_humano, deck_ia, tipos_humano, tipos_ia, randi(), -1)
 	ia = HeuristicAI.new(nivel_ia, randi())
+	_aplicar_regras_chefe_pre_setup()
 	_construir_ui()
 	_apos_mudanca()
+
+
+## Regras especiais de chefe aplicadas antes do posicionamento.
+func _aplicar_regras_chefe_pre_setup() -> void:
+	var regras: Array = Ctx.batalha.get("regras", [])
+	if regras.has("dupla") and int(Ctx.batalha.get("fase_dupla", 1)) == 2:
+		# 2ª batalha dos Gêmeos: suas Bestas entram cansadas (10 de dano)
+		state["modificadores"] = {"dano_ao_entrar": {lado_humano: 10}}
+
+
+## Regras de chefe aplicadas quando a batalha começa (pós-posicionamento).
+func _aplicar_regras_chefe_pos_setup() -> void:
+	if _regras_pos_aplicadas or state["fase"] != "jogando":
+		return
+	_regras_pos_aplicadas = true
+	var regras: Array = Ctx.batalha.get("regras", [])
+	var ativo_ia: Variant = Rules.jogador(state, 1 - lado_humano)["ativo"]
+	if ativo_ia == null:
+		return
+	if regras.has("ferramenta_inicial") and ativo_ia["ferramenta"] == null:
+		ativo_ia["ferramenta"] = "AL-016"
+		state["log"].append("Regra de chefe: %s começa com Garra Afiada!" % nome_oponente)
+	if regras.has("mana_extra"):
+		var tipo: String = tipos_ia[0] if not tipos_ia.is_empty() else "flora"
+		ativo_ia["energias"].append(tipo)
+		state["log"].append("Regra de chefe: %s começa com 1 mana extra!" % nome_oponente)
 
 
 # ============================================================ construção
@@ -153,6 +181,7 @@ func _novo_slot() -> PanelContainer:
 # ============================================================ renderização
 
 func _apos_mudanca() -> void:
+	_aplicar_regras_chefe_pos_setup()
 	_render()
 	if state["fase"] == "fim":
 		_mostrar_fim()
@@ -453,7 +482,14 @@ func _mostrar_fim() -> void:
 	btn.add_theme_font_size_override("font_size", 32)
 	btn.pressed.connect(func():
 		batalha_terminou.emit(venceu, state)
-		# Sem ninguém tratando o fim (batalha livre), volta para a Home.
-		if batalha_terminou.get_connections().is_empty():
+		if Ctx.batalha.get("campanha", false):
+			# A trilha da campanha processa o resultado ao ser recarregada.
+			Ctx.resultado = {
+				"venceu": venceu,
+				"turnos": int(state["turno"]),
+				"selos_oponente": int(Rules.jogador(state, 1 - lado_humano)["selos"]),
+			}
+			get_tree().change_scene_to_file("res://game/campaign/trail.tscn")
+		elif batalha_terminou.get_connections().is_empty():
 			get_tree().change_scene_to_file("res://game/home/home.tscn"))
 	v.add_child(btn)

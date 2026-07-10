@@ -6,6 +6,7 @@ var db: CardDB
 var _lbl_timer: Label
 var _btn_abrir: Button
 var _btn_ampulheta: Button
+var _btn_bonus: Button
 var _area_reveal: VBoxContainer
 var _cartas_pendentes: Array = []
 
@@ -48,6 +49,8 @@ func _ready() -> void:
 	botoes.add_child(_btn_abrir)
 	_btn_ampulheta = botao("⏳ Usar ampulheta (−1h)", _usar_ampulheta, 26)
 	botoes.add_child(_btn_ampulheta)
+	_btn_bonus = botao("", _abrir_bonus, 26)
+	botoes.add_child(_btn_bonus)
 
 	_area_reveal = VBoxContainer.new()
 	_area_reveal.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -79,6 +82,9 @@ func _atualizar() -> void:
 		_btn_ampulheta.visible = true
 		_btn_ampulheta.text = "⏳ Usar ampulheta (−1h) — tem %d" % Save.dados["ampulhetas"]
 		_btn_ampulheta.disabled = int(Save.dados["ampulhetas"]) <= 0
+	var bonus := int(Save.dados.get("pacotes_bonus", 0))
+	_btn_bonus.visible = bonus > 0
+	_btn_bonus.text = "🎁 Abrir pacote bônus (×%d)" % bonus
 
 
 func _usar_ampulheta() -> void:
@@ -96,6 +102,20 @@ func _abrir_pacote() -> void:
 	_cartas_pendentes = PackSystem.abrir(db, Save.dados, agora, rng)
 	Save.adicionar_cartas(_cartas_pendentes)
 	_btn_abrir.disabled = true
+	_revelar_proxima()
+
+
+## Pacote bônus (recompensa de campanha): abre sem consumir o timer.
+func _abrir_bonus() -> void:
+	if int(Save.dados.get("pacotes_bonus", 0)) <= 0:
+		return
+	Save.dados["pacotes_bonus"] = int(Save.dados["pacotes_bonus"]) - 1
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	var timer_anterior := int(Save.dados["prox_pacote_ts"])
+	_cartas_pendentes = PackSystem.abrir(db, Save.dados, int(Time.get_unix_time_from_system()), rng)
+	Save.dados["prox_pacote_ts"] = timer_anterior  # bônus não mexe no timer
+	Save.adicionar_cartas(_cartas_pendentes)
 	_revelar_proxima()
 
 

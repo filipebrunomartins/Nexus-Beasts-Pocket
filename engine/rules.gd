@@ -480,6 +480,7 @@ static func _ac_posicionar_ativo(db: CardDB, state: Dictionary, acao: Dictionary
 	var p := jogador(state, acao["lado"])
 	var id: String = p["mao"].pop_at(acao["indice_mao"])
 	p["ativo"] = nova_besta(db, id, 0)
+	_aplicar_dano_ao_entrar(state, acao["lado"], p["ativo"])
 	_log(state, "Jogador %d posiciona %s como Ativo." % [acao["lado"], db.get_card(id)["nome"]])
 	# Quando ambos posicionaram, a batalha começa.
 	if state["jogadores"][0]["ativo"] != null and state["jogadores"][1]["ativo"] != null:
@@ -494,9 +495,19 @@ static func _ac_colocar_reserva(db: CardDB, state: Dictionary, acao: Dictionary)
 	if (p["reserva"] as Array).size() >= LIMITE_RESERVA:
 		return false
 	var id: String = p["mao"].pop_at(acao["indice_mao"])
-	p["reserva"].append(nova_besta(db, id, state["turno"]))
+	var besta := nova_besta(db, id, state["turno"])
+	_aplicar_dano_ao_entrar(state, state["jogador_atual"], besta)
+	p["reserva"].append(besta)
 	_log(state, "%s entra na Reserva." % db.get_card(id)["nome"])
 	return true
+
+
+## Modificador de chefe (Gêmeos): bestas do lado indicado entram com dano.
+static func _aplicar_dano_ao_entrar(state: Dictionary, lado: int, besta: Dictionary) -> void:
+	var mods: Dictionary = state.get("modificadores", {})
+	var dano := int((mods.get("dano_ao_entrar", {}) as Dictionary).get(lado, 0))
+	if dano > 0:
+		besta["dano"] = dano
 
 
 static func _ac_evoluir(db: CardDB, state: Dictionary, acao: Dictionary) -> bool:

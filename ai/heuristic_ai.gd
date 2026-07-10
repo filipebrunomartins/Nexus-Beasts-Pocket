@@ -89,6 +89,12 @@ func _escolher_jogada(db: CardDB, state: Dictionary, lado: int, acoes: Array) ->
 	if por_tipo.has("usar_habilidade"):
 		return por_tipo["usar_habilidade"][0]
 
+	# 4.5) Nível 2+: usa Mentores/Itens/Ferramentas e recua quase-nocauteados
+	if nivel >= 2:
+		var apoio := _jogada_de_apoio(db, state, lado, por_tipo)
+		if not apoio.is_empty():
+			return apoio
+
 	# 5) Atacar com o maior dano estimado
 	if por_tipo.has("atacar"):
 		var melhor: Dictionary = por_tipo["atacar"][0]
@@ -101,6 +107,54 @@ func _escolher_jogada(db: CardDB, state: Dictionary, lado: int, acoes: Array) ->
 		return melhor
 
 	return {"tipo": "encerrar_turno"}
+
+
+## Nível 2+: joga cartas de apoio quando fazem sentido e recua o Ativo em risco.
+func _jogada_de_apoio(db: CardDB, state: Dictionary, lado: int, por_tipo: Dictionary) -> Dictionary:
+	var p: Dictionary = state["jogadores"][lado]
+
+	# Ferramenta no Ativo
+	if por_tipo.has("anexar_ferramenta"):
+		for acao in por_tipo["anexar_ferramenta"]:
+			if acao["alvo"]["pos"] == "ativo":
+				return acao
+
+	# Mentores/Itens com condição simples de utilidade
+	for acao in por_tipo.get("jogar_aliado", []):
+		var card: Dictionary = db.get_card(p["mao"][acao["indice_mao"]])
+		match card["id"]:
+			"AL-002":  # Recruta Bruno: compre 2
+				if (p["mao"] as Array).size() <= 5:
+					return acao
+			"AL-001":  # Professora Íris: descarta a mão
+				if (p["mao"] as Array).size() <= 2:
+					return acao
+			"AL-003", "AL-009":  # curas: se o alvo está ferido o bastante
+				var alvo: Variant = Rules.besta_em(state, lado, acao.get("params", {}).get("alvo_proprio", {"pos": "ativo"}))
+				if alvo != null and int(alvo["dano"]) >= 30:
+					return acao
+			"AL-010":  # Antídoto: se o Ativo tem condição
+				if p["ativo"] != null and not (p["ativo"]["status"] as Array).is_empty():
+					return acao
+			"AL-005", "AL-006", "AL-007", "AL-012":  # benefício direto
+				return acao
+
+	# Recuar o Ativo quase nocauteado se houver reserva mais saudável
+	if por_tipo.has("recuar") and p["ativo"] != null:
+		var ps := Rules.ps_total(db, p["ativo"])
+		if int(p["ativo"]["dano"]) * 10 >= ps * 7:  # ≥70% de dano
+			var melhor: Dictionary = {}
+			var melhor_valor := -1.0
+			for acao in por_tipo["recuar"]:
+				var besta: Dictionary = p["reserva"][acao["indice_reserva"]]
+				var saude := 1.0 - float(besta["dano"]) / Rules.ps_total(db, besta)
+				var valor := saude + (besta["energias"] as Array).size() * 0.3
+				if saude > 0.5 and valor > melhor_valor:
+					melhor_valor = valor
+					melhor = acao
+			if not melhor.is_empty():
+				return melhor
+	return {}
 
 
 ## Dano esperado de uma ação de ataque (moedas contam metade).

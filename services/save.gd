@@ -55,6 +55,7 @@ func _novo_perfil() -> Dictionary:
 		"deck_ativo": 0,
 		"prox_pacote_ts": 0,
 		"pacotes_abertos": 0,
+		"pacotes_bonus": 0,
 		"campanha": {"vencidos": {}, "estrelas": {}},
 		"missoes": {"dia": "", "lista": []},
 		"titulos": [],
