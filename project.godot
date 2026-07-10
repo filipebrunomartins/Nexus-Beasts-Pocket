@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Save="*res://services/save.gd"
+Ctx="*res://services/context.gd"
 
 [display]
 

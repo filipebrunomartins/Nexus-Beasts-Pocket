@@ -15,6 +15,12 @@ func _ready() -> void:
 	var qtd := maxi(int(OS.get_environment("NBP_QTD")), 1) if OS.get_environment("NBP_QTD") != "" else 3
 	var intervalo := 2.0
 
+	# Preparação de contexto para telas que exigem (editor de deck)
+	if OS.get_environment("NBP_DECK_EDIT") == "1":
+		var decks: Array = Save.dados["decks"]
+		Ctx.deck_em_edicao = decks.size()
+		decks.append({"nome": "Deck de teste", "cartas": (decks[0]["cartas"] as Array).slice(0, 12), "emprestado": false})
+
 	var inst: Node = load(cena).instantiate()
 	add_child(inst)
 	var auto := OS.get_environment("NBP_AUTO") == "1"

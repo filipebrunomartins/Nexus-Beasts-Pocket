@@ -41,13 +41,28 @@ var _overlay_fim: PanelContainer
 
 func _ready() -> void:
 	db = CardDB.load_default()
+	# Campanha (Etapa 9) configura via Ctx.batalha; batalha livre usa o deck
+	# ativo do jogador contra um deck inicial aleatório.
+	if not Ctx.batalha.is_empty():
+		var cfg: Dictionary = Ctx.batalha
+		deck_ia = cfg["deck_ia"]
+		tipos_ia = cfg["tipos_ia"]
+		nivel_ia = int(cfg.get("nivel_ia", 1))
+		nome_oponente = cfg.get("nome_oponente", "Oponente")
 	if deck_humano.is_empty():
+		var salvo: Dictionary = Save.dados["decks"][clampi(int(Save.dados["deck_ativo"]), 0, (Save.dados["decks"] as Array).size() - 1)]
 		var decks := CardDB.load_decks()
-		deck_humano = decks[0]["cartas"]
-		tipos_humano = decks[0]["tipos_mana"]
-		deck_ia = decks[1]["cartas"]
-		tipos_ia = decks[1]["tipos_mana"]
-		nome_oponente = "IA — " + String(decks[1]["nome"])
+		if Rules.validar_deck(db, salvo["cartas"]).is_empty():
+			deck_humano = (salvo["cartas"] as Array).duplicate()
+		else:
+			deck_humano = decks[0]["cartas"]
+		tipos_humano = Rules.sugerir_tipos_mana(db, deck_humano)
+	if deck_ia.is_empty():
+		var decks := CardDB.load_decks()
+		var sorteio: Dictionary = decks[randi() % decks.size()]
+		deck_ia = sorteio["cartas"]
+		tipos_ia = sorteio["tipos_mana"]
+		nome_oponente = "IA — " + String(sorteio["nome"])
 	state = Rules.nova_partida(db, deck_humano, deck_ia, tipos_humano, tipos_ia, randi(), -1)
 	ia = HeuristicAI.new(nivel_ia, randi())
 	_construir_ui()
